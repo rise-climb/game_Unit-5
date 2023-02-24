@@ -43,3 +43,4 @@ JavaScript Data:
   * width,height of players, objects, pit
   * x position of the cliffs
 */
+
