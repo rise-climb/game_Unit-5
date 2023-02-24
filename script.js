@@ -44,3 +44,30 @@ JavaScript Data:
   * x position of the cliffs
 */
 
+///////////
+/// Variables
+//////////
+
+const background = document.querySelector(".background");
+const titleScreenSection = document.querySelector(".titleScreenSection");
+const infoScreenSection = document.querySelector(".infoScreenSection");
+const endScreenSection = document.querySelector(".endScreenSection");
+const gameSpace = document.querySelector(".gameSpace")
+const scoreBoards = document.querySelector(".scoreboard");
+
+const startButton = document.querySelector(".start");
+const infoButton = document.querySelector("#info");
+const titleScreenButton = document.querySelector(".titleScreen");
+
+class Player {
+  constructor() {
+    this.logCount = 0;
+    this.hasRock = false;
+    this.position = [];
+  }
+  // .addLog()
+  // .removeLog()
+}
+
+const redPlayer = new Player();
+const bluePlayer = new Player();
