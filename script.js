@@ -1,43 +1,40 @@
 /* 
 Game Begins:
-  * Score for both players is 0
-  * Both paddles at the center of the screen vertically, on opposite sides horizontally
-  * paddles begin stationary
-  * ball starts in the middle horizontally and vertically
-  * starting velocity is non-0
-Game Ends when one player has 11 points
-  * Show who won the game 
-  * Control over paddles stops
-  * Ball stops moving
-  * +Give an option to restart the game
-  * +maybe change the background
-  * ++faster for the next round
+  * user presses start game button
+    *2 players fall from top of screen
+    * the logs and rocks start to fall fall
+  
 Gameplay, on each new frame:
   * the players should move
-  * the logs and rocks should fall
   * check to see if top player log stack collides with log, add to stack
       * if player has 6+ logs, increase amount of rocks falling
       * if player has 10 logs, tell them to go to cliff
       *   if they have 10 logs and are at a cliff, climb stack and player wins
   *check to see it player body collides with falling rock, send in direction of other player
  
-  * check if it collides with the top/bottom wall, bounce
-  * check if it collides with the left/right wall, score a point
-  * +if collision occurs, increase velocity 
-  * +pause/resume feature
+Game Ends when one player has 11 points
+  * player has 10 logs
+ `  * has to walk to a cliff
+    * log stack drops next to cliff
+    * player climbs log stack & goes on top of cliff
+
+  * other player collapses
+ 
 User Inputs:
-  * separate keyboard controls for each paddle
-  * +control paddle with mouse?
+  * two keys for each player, moves left and right
+  * pressing start, title screen, all those
+
 Bonus Features:
-  * Versus AI (mouse control)
-  * single player mode, mouse controls both sides
+  * jumping
+  * extra materials falling
+
 Visual Elements
   * The arena (static)
   * Two players (animated)
   * Falling Rocks (animated)
   * Falling Logs
-  * +Score Board (static, but modified in the game)
-  * ++Middle Line (static)
+  * log counts for each player towards the sides (static, but modified in the game)
+  
 JavaScript Data:
   * x position of the players
   * x,y position of the falling objects
