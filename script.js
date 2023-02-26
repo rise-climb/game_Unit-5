@@ -55,16 +55,16 @@ kaboom();
 /// Variables
 //////////
 
-const background = document.querySelector(".background");
-const titleScreenSection = document.querySelector(".titleScreenSection");
-const infoScreenSection = document.querySelector(".infoScreenSection");
-const endScreenSection = document.querySelector(".endScreenSection");
-const gameSpace = document.querySelector(".gameSpace");
-const scoreBoards = document.querySelector(".scoreboard");
+// const background = document.querySelector(".background");
+// const titleScreenSection = document.querySelector(".titleScreenSection");
+// const infoScreenSection = document.querySelector(".infoScreenSection");
+// const endScreenSection = document.querySelector(".endScreenSection");
+// const gameSpace = document.querySelector(".gameSpace");
+// const scoreBoards = document.querySelector(".scoreboard");
 
-const startButton = document.querySelector(".start");
-const infoButton = document.querySelector("#info");
-const titleScreenButton = document.querySelector(".titleScreen");
+// const startButton = document.querySelector(".start");
+// const infoButton = document.querySelector("#info");
+// const titleScreenButton = document.querySelector(".titleScreen");
 
 class Player {
   constructor() {
@@ -76,10 +76,71 @@ class Player {
   // .removeLog()
 }
 
-const redPlayer = new Player();
-const bluePlayer = new Player();
-
+const redPlayerData = new Player();
+const bluePlayerData = new Player();
 
 ///////////
 /// Variables
 //////////
+
+///////////
+/// Kaboom
+//////////
+
+loadSprite("background", "images/SUPERFINALBACKGROUND.png");
+add([
+  sprite("background"),
+  pos(width() / 2, height() / 2),
+  origin("center"),
+  // Allow the background to be scaled
+  scale(1.2, 1.13),
+  // Keep the background position fixed even when the camera moves
+  fixed(),
+]);
+
+loop(1, () => {
+  loadSprite("log", "./images/log.png");
+  add([
+    sprite("log"),
+    pos(rand(0, width()), 0),
+    scale(0.25),
+    area(),
+    move(DOWN, 200),
+    cleanup(),
+    "log",
+  ]);
+});
+
+loadSprite("redGuy", "./images/FINALredguy.ong.png");
+const redPlayer = add([
+  sprite("redGuy"),
+  scale(0.15),
+  area(),
+  pos(width() / 3, 0),
+  body(),
+  {
+    speed: 200,
+    jumpspeed: 1000,
+  },
+]);
+
+onKeyPress("space", () => {
+  if (redPlayer.isGrounded()) {
+    redPlayer.jump();
+  }
+});
+onKeyDown("a", () => {
+  redPlayer.move(-redPlayer.speed, 0);
+});
+onKeyDown("d", () => {
+  redPlayer.move(redPlayer.speed, 0);
+});
+
+const platform = add([
+  rect(width(), 48),
+  pos(0, height()),
+  outline(4),
+  area(),
+  solid(),
+  //color(127, 200, 255),
+]);
