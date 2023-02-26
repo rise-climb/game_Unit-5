@@ -145,7 +145,21 @@ const bluePlayer = add([
   "blue",
 ]);
 
-onKeyPress("space", () => {
+onKeyPress("i", () => {
+  if (bluePlayer.isGrounded()){
+    bluePlayer.jump();
+  }
+});
+
+onKeyDown("j", () => {
+  bluePlayer.move(-bluePlayer.speed, 0);
+});
+onKeyDown("l", () => {
+  bluePlayer.move(bluePlayer.speed, 0);
+});
+
+
+onKeyPress("w", () => {
   if (redPlayer.isGrounded()) {
     redPlayer.jump();
   }
