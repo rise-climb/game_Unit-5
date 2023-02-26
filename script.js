@@ -185,6 +185,17 @@ onKeyDown("d", () => {
   redPlayer.move(redPlayer.speed, 0);
 });
 
+///making the two pass each other
+
+//layers(["normal", "obj", "ui"], "normal");
+
+// collides("red", "blue", () => {
+//   let redPos = redPlayer.pos
+//   redPlayer.pos = bluePlayer.pos
+
+
+// });
+
 ////
 /////////////////////
 
@@ -248,6 +259,10 @@ function escape(player) {
       color(255, 0, 0),
       pos(width() / 11, height() / 2),
     ]);
+
+    loop(0.5, () => {
+      redEscape.hidden = !redEscape.hidden;
+    });
   } else {
     blueEscape = add([
       text("get to a \n cliff!", {
@@ -256,6 +271,9 @@ function escape(player) {
       color(0, 0, 255),
       pos(6 * (width() / 7), height() / 2),
     ]);
+    loop(0.5, () => {
+      blueEscape.hidden = !blueEscape.hidden;
+    });
   }
 }
 
