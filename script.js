@@ -55,17 +55,6 @@ kaboom();
 /// Variables
 //////////
 
-// const background = document.querySelector(".background");
-// const titleScreenSection = document.querySelector(".titleScreenSection");
-// const infoScreenSection = document.querySelector(".infoScreenSection");
-// const endScreenSection = document.querySelector(".endScreenSection");
-// const gameSpace = document.querySelector(".gameSpace");
-// const scoreBoards = document.querySelector(".scoreboard");
-
-// const startButton = document.querySelector(".start");
-// const infoButton = document.querySelector("#info");
-// const titleScreenButton = document.querySelector(".titleScreen");
-
 class Player {
   constructor() {
     this.logCount = 7;
@@ -86,12 +75,11 @@ const redPlayerData = new Player();
 const bluePlayerData = new Player();
 
 ///////////
-/// Variables
-//////////
-
-///////////
 /// Kaboom
 //////////
+
+////////////////////////////////
+//// background + platform ////
 
 let bgLoad = await loadSprite("background", "images/SUPERFINALBACKGROUND.png");
 let background = add([
@@ -103,10 +91,23 @@ let background = add([
   // Keep the background position fixed even when the camera moves
   fixed(),
 ]);
-
 background.scaleTo(
   Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
 );
+
+const platform = add([
+  rect(width(), 50),
+  pos(0, height()),
+  outline(4),
+  area(),
+  solid(),
+]);
+
+////
+/////////////////////////
+
+/////////////////////////
+//// loading and spawning in players and logs
 
 loop(1, () => {
   loadSprite("log", "./images/log.png");
@@ -153,6 +154,11 @@ const bluePlayer = add([
   "blue",
 ]);
 
+//////////////////////////
+
+//////////////////////////
+//// player movement
+
 onKeyPress("i", () => {
   if (bluePlayer.isGrounded()) {
     bluePlayer.jump();
@@ -178,15 +184,10 @@ onKeyDown("d", () => {
   redPlayer.move(redPlayer.speed, 0);
 });
 
-const platform = add([
-  rect(width(), 50),
-  pos(0, height()),
-  outline(4),
-  area(),
-  solid(),
-]);
+////
+/////////////////////
 
-////////////////////  SCORES  ////////////////////
+//////////////  SCORES  /////////////////
 /// creating the score numbers visually
 const redScore = add([
   text(redPlayerData.logCount, {
@@ -233,12 +234,13 @@ bluePlayer.onCollide("log", (log) => {
 ////////////////////////////////////////////////
 
 ////////////////////  ESCAPING   ////////////////
-///conditions met for starting escape
+///conditions met for starting escape, makes the text appear
+//on the screen and stops adding logs to the players log count
+let redEscape = null;
+let blueEscape = null;
 function escape(player) {
-  //load the text
-  //get which player it is
   if (player == "red") {
-    let redEscape = add([
+    redEscape = add([
       text("get to a \n cliff!", {
         size: 50,
       }),
@@ -246,7 +248,7 @@ function escape(player) {
       pos(width() / 11, height() / 2),
     ]);
   } else {
-    let blueEscape = add([
+    blueEscape = add([
       text("get to a \n cliff!", {
         size: 50,
       }),
