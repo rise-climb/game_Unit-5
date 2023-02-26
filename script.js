@@ -92,9 +92,9 @@ let background = add([
   sprite("background"),
   pos(width() / 2, height() / 2),
   origin("center"),
-  scale(1),
+  scale(1), // PUTTING A PIN
   // Allow the background to be scaled
-  //scale(1.2, 1.13),
+  // scale(1.2, 1.13),
   // Keep the background position fixed even when the camera moves
   fixed(),
 ]);
