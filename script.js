@@ -87,16 +87,21 @@ const bluePlayerData = new Player();
 /// Kaboom
 //////////
 
-loadSprite("background", "images/SUPERFINALBACKGROUND.png");
-add([
+let bgLoad = await loadSprite("background", "images/SUPERFINALBACKGROUND.png");
+let background = add([
   sprite("background"),
   pos(width() / 2, height() / 2),
   origin("center"),
+  scale(1),
   // Allow the background to be scaled
-  scale(1.2, 1.13),
+  //scale(1.2, 1.13),
   // Keep the background position fixed even when the camera moves
   fixed(),
 ]);
+
+background.scaleTo(
+  Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
+);
 
 loop(1, () => {
   loadSprite("log", "./images/log.png");
@@ -124,26 +129,18 @@ const redPlayer = add([
   },
 ]);
 
-
-loadSprite("blueGuy", "./images/FINALblueguyRotated.png")
+loadSprite("blueGuy", "./images/FINALblueguyRotated.png");
 const bluePlayer = add([
   sprite("blueGuy"),
   scale(0.15),
   area(),
-  pos( 2* (width()/3) , 0 ),
-  body (),
+  pos(2 * (width() / 3), 0),
+  body(),
   {
     speed: 200,
     jumpspeed: 1000,
-  }
-])
-
-
-
-
-
-
-
+  },
+]);
 
 onKeyPress("space", () => {
   if (redPlayer.isGrounded()) {
