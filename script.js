@@ -94,6 +94,7 @@ let background = add([
   origin("center"),
   scale(1),
   // Allow the background to be scaled
+  //scale(1.2, 1.13),
   // Keep the background position fixed even when the camera moves
   fixed(),
 ]);
@@ -126,8 +127,7 @@ const redPlayer = add([
     speed: 200,
     jumpspeed: 1000,
   },
-  "player",
-  "red",
+
 ]);
 
 loadSprite("blueGuy", "./images/FINALblueguyRotated.png");
@@ -141,8 +141,6 @@ const bluePlayer = add([
     speed: 200,
     jumpspeed: 1000,
   },
-  "player",
-  "blue",
 ]);
 
 onKeyPress("i", () => {
@@ -179,10 +177,3 @@ const platform = add([
   solid(),
   //color(127, 200, 255),
 ]);
-
-redPlayer.onCollide("log", () => {
-  redPlayerData.logCount++;
-  console.log("red player log count: ", redPlayerData.logCount);
-});
-
-onCollide("player", "log", () => {});
