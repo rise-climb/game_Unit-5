@@ -124,6 +124,27 @@ const redPlayer = add([
   },
 ]);
 
+
+loadSprite("blueGuy", "./images/FINALblueguyRotated.png")
+const bluePlayer = add([
+  sprite("blueGuy"),
+  scale(0.15),
+  area(),
+  pos( 2* (width()/3) , 0 ),
+  body (),
+  {
+    speed: 200,
+    jumpspeed: 1000,
+  }
+])
+
+
+
+
+
+
+
+
 onKeyPress("space", () => {
   if (redPlayer.isGrounded()) {
     redPlayer.jump();
