@@ -4,7 +4,7 @@ Game Begins:
     *2 players fall from top of screen
     * the logs and rocks start to fall fall
   
-Gameplay, on each new frame:
+Game play, on each new frame:
   * the players should move
   * check to see if top player log stack collides with log, add to stack
       * if player has 6+ logs, increase amount of rocks falling
@@ -72,8 +72,14 @@ class Player {
     this.hasRock = false;
     this.position = [];
   }
-  // .addLog()
-  // .removeLog()
+  addLog() {
+    this.logCount++
+    return this.logCount
+  }
+  removeLog() {
+    this.logCount--
+    return this.logCount;
+  }
 }
 
 const redPlayerData = new Player();
@@ -119,7 +125,8 @@ loadSprite("redGuy", "./images/FINALredguy.ong.png");
 const redPlayer = add([
   sprite("redGuy"),
   scale(0.15),
-  area(),
+  origin("center"),
+  area({ scale: 0.8 }),
   pos(width() / 3, 0),
   body(),
   {
@@ -134,7 +141,8 @@ loadSprite("blueGuy", "./images/FINALblueguyRotated.png");
 const bluePlayer = add([
   sprite("blueGuy"),
   scale(0.15),
-  area(),
+  origin("center"),
+  area({scale: 0.8}),
   pos(2 * (width() / 3), 0),
   body(),
   {
@@ -146,7 +154,7 @@ const bluePlayer = add([
 ]);
 
 onKeyPress("i", () => {
-  if (bluePlayer.isGrounded()){
+  if (bluePlayer.isGrounded()) {
     bluePlayer.jump();
   }
 });
@@ -157,7 +165,6 @@ onKeyDown("j", () => {
 onKeyDown("l", () => {
   bluePlayer.move(bluePlayer.speed, 0);
 });
-
 
 onKeyPress("w", () => {
   if (redPlayer.isGrounded()) {
@@ -172,17 +179,43 @@ onKeyDown("d", () => {
 });
 
 const platform = add([
-  rect(width(), 48),
+  rect(width(), 50),
   pos(0, height()),
   outline(4),
   area(),
   solid(),
-  //color(127, 200, 255),
 ]);
 
-redPlayer.onCollide("log", () => {
-  redPlayerData.logCount++;
-  console.log("red player log count: ", redPlayerData.logCount);
+
+////////////////////////////////////////////////
+/// creating the score numbers visually
+const redScore = add([
+  text(redPlayerData.logCount, {
+    size: 175,
+  }),
+  color(255, 0, 0),
+  pos(width() / 9, height() / 2),
+]);
+
+const blueScore = add([
+  text(bluePlayerData.logCount, {
+    size: 175,
+  }),
+  color(0, 0, 255),
+  pos(7 * (width() / 8), height() / 2),
+]);
+
+/// and changing their values on log collision
+redPlayer.onCollide("log", (log) => {
+  redScore.text = redPlayerData.addLog();
+  destroy(log);
 });
 
-onCollide("player", "log", () => {});
+bluePlayer.onCollide("log", (log) => {
+  blueScore.text = bluePlayerData.addLog();
+  destroy(log);
+});
+///
+////////////////////////////////////////////////
+
+
