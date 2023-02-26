@@ -68,16 +68,16 @@ kaboom();
 
 class Player {
   constructor() {
-    this.logCount = 0;
+    this.logCount = 7;
     this.hasRock = false;
     this.position = [];
   }
   addLog() {
-    this.logCount++
-    return this.logCount
+    this.logCount++;
+    return this.logCount;
   }
   removeLog() {
-    this.logCount--
+    this.logCount--;
     return this.logCount;
   }
 }
@@ -130,7 +130,7 @@ const redPlayer = add([
   pos(width() / 3, 0),
   body(),
   {
-    speed: 200,
+    speed: 1200,
     jumpspeed: 1000,
   },
   "player",
@@ -142,11 +142,11 @@ const bluePlayer = add([
   sprite("blueGuy"),
   scale(0.15),
   origin("center"),
-  area({scale: 0.8}),
+  area({ scale: 0.8 }),
   pos(2 * (width() / 3), 0),
   body(),
   {
-    speed: 200,
+    speed: 1200,
     jumpspeed: 1000,
   },
   "player",
@@ -186,8 +186,7 @@ const platform = add([
   solid(),
 ]);
 
-
-////////////////////////////////////////////////
+////////////////////  SCORES  ////////////////////
 /// creating the score numbers visually
 const redScore = add([
   text(redPlayerData.logCount, {
@@ -207,15 +206,54 @@ const blueScore = add([
 
 /// and changing their values on log collision
 redPlayer.onCollide("log", (log) => {
-  redScore.text = redPlayerData.addLog();
-  destroy(log);
+  if (redPlayerData.logCount < 9) {
+    redScore.text = redPlayerData.addLog();
+    destroy(log);
+  } else if (redPlayerData.logCount == 9) {
+    redPlayerData.addLog();
+    destroy(log);
+    redScore.hidden = true;
+    escape("red");
+  }
 });
 
 bluePlayer.onCollide("log", (log) => {
-  blueScore.text = bluePlayerData.addLog();
-  destroy(log);
+  if (bluePlayerData.logCount < 9) {
+    blueScore.text = bluePlayerData.addLog();
+    destroy(log);
+  } else if (bluePlayerData.logCount == 9) {
+    bluePlayerData.addLog();
+    destroy(log);
+    blueScore.hidden = true;
+    escape("blue");
+  }
 });
+
 ///
 ////////////////////////////////////////////////
 
+////////////////////  ESCAPING   ////////////////
+///conditions met for starting escape
+function escape(player) {
+  //load the text
+  //get which player it is
+  if (player == "red") {
+    let redEscape = add([
+      text("get to a \n cliff!", {
+        size: 50,
+      }),
+      color(255, 0, 0),
+      pos(width() / 11, height() / 2),
+    ]);
+  } else {
+    let blueEscape = add([
+      text("get to a \n cliff!", {
+        size: 50,
+      }),
+      color(0, 0, 255),
+      pos(6 * (width() / 7), height() / 2),
+    ]);
+  }
+}
 
+////////////////////////////////////////////////
