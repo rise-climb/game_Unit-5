@@ -45,6 +45,13 @@ JavaScript Data:
 */
 
 ///////////
+/// Initializing Kaboom
+//////////
+
+import kaboom from "https://unpkg.com/kaboom/dist/kaboom.mjs";
+kaboom();
+
+///////////
 /// Variables
 //////////
 
@@ -52,7 +59,7 @@ const background = document.querySelector(".background");
 const titleScreenSection = document.querySelector(".titleScreenSection");
 const infoScreenSection = document.querySelector(".infoScreenSection");
 const endScreenSection = document.querySelector(".endScreenSection");
-const gameSpace = document.querySelector(".gameSpace")
+const gameSpace = document.querySelector(".gameSpace");
 const scoreBoards = document.querySelector(".scoreboard");
 
 const startButton = document.querySelector(".start");
@@ -71,3 +78,8 @@ class Player {
 
 const redPlayer = new Player();
 const bluePlayer = new Player();
+
+
+///////////
+/// Variables
+//////////
