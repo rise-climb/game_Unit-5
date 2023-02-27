@@ -111,15 +111,17 @@ const platform = add([
 ]);
 const leftPlatform = add([
   rect(1, height()),
-  pos(width() / 4, 0),
+  pos(width() / 6, 0),
   area(),
   solid(),
+  opacity(0)
 ]);
 const rightPlatform = add([
   rect(1, height()),
-  pos( 3 * (width() / 4), 0),
+  pos( 5 * (width() / 6), 0),
   area(),
   solid(),
+  opacity(0)
 ]);
 
 ////
@@ -199,7 +201,16 @@ onKeyDown("d", () => {
   redPlayer.move(redPlayer.speed, 0);
 });
 
-////
+//// player going up on logs
+function climbUpLog (player) {
+
+// then have player go up on the logs (image from google)
+// dont want the user to go up just have the computer do that 
+
+ 
+}
+
+
 /////////////////////
 
 //////////////  SCORES  /////////////////
