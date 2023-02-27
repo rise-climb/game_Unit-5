@@ -121,18 +121,18 @@ scene("gamePlay", () => {
   ]);
   const leftPlatform = add([
     rect(1, height()),
-    pos(0, 0),
-    outline(4),
-    area(),
+    pos(width() / 6, 0),
+      area(),
     solid(),
-  ]);
+    opacity(0)
+]);
   const rightPlatform = add([
     rect(1, height()),
-    pos(width(), 0),
-    outline(4),
-    area(),
+    pos( 5 * (width() / 6), 0),
+      area(),
     solid(),
-  ]);
+    opacity(0)
+]);
 
   /////////////////////////
   //// loading and spawning in players and logs
@@ -208,8 +208,17 @@ scene("gamePlay", () => {
     redPlayer.move(redPlayer.speed, 0);
   });
 
-  ////
-  /////////////////////
+//// player going up on logs
+function climbUpLog (player) {
+
+// then have player go up on the logs (image from google)
+// dont want the user to go up just have the computer do that 
+
+ 
+}
+
+
+/////////////////////
 
   /////////////////////////////// SCORES
   /// creating the score numbers visually
@@ -420,3 +429,35 @@ function startGame() {
   go("titleScreen");
 }
 startGame();
+
+
+
+////// climbing up tree 
+
+// const tree = add([
+//   sprite("tree"),
+//   pos(200, 0),
+// ]);
+
+// // Define the movement function for the character sprite
+// function climb() {
+//   bluePlayer.move(0, -100);
+// }
+
+// // Set up collision detection between the character sprite and the tree object
+// bluePlayer.collides("tree", () => {
+//   // Stop the character's movement and remove the collision detection
+//   bluePlayer.pause();
+//   bluePlayer.collides("tree", null);
+
+//   // Climb the tree
+//   climb();
+// });
+
+// Start the game loop
+// start();
+
+
+
+
+
