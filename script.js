@@ -111,15 +111,13 @@ const platform = add([
 ]);
 const leftPlatform = add([
   rect(1, height()),
-  pos(0, 0),
-  outline(4),
+  pos(width() / 4, 0),
   area(),
   solid(),
 ]);
 const rightPlatform = add([
   rect(1, height()),
-  pos(width(), 0),
-  outline(4),
+  pos( 3 * (width() / 4), 0),
   area(),
   solid(),
 ]);
@@ -134,7 +132,7 @@ loop(1, () => {
   loadSprite("log", "./images/log.png");
   add([
     sprite("log"),
-    pos(rand(0, width()), 0),
+    pos(rand(width() / 4, 3 * (width() / 4)), 0),
     scale(0.3),
     area(),
     move(DOWN, 200),
