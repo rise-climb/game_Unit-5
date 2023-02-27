@@ -122,17 +122,17 @@ scene("gamePlay", () => {
   const leftPlatform = add([
     rect(1, height()),
     pos(width() / 6, 0),
-      area(),
+    area(),
     solid(),
-    opacity(0)
-]);
+    opacity(0),
+  ]);
   const rightPlatform = add([
     rect(1, height()),
-    pos( 5 * (width() / 6), 0),
-      area(),
+    pos(5 * (width() / 6), 0),
+    area(),
     solid(),
-    opacity(0)
-]);
+    opacity(0),
+  ]);
 
   /////////////////////////
   //// loading and spawning in players and logs
@@ -179,6 +179,58 @@ scene("gamePlay", () => {
     });
   });
 
+  onUpdate("log", (log) => {
+    log.pos.y += 3;
+    let newP;
+    if (log.isColliding(bluePlayer)) {
+      if (bluePlayerData.logCount + 1 == 20) {
+        if (bluePlayerData.logCount == 19) {
+          bluePlayerData.addLog();
+        }
+        blueScore.hidden = true;
+        escape("blue");
+      } else {
+        blueScore.text = bluePlayerData.addLog();
+        let mainX = bluePlayer.pos.x;
+        let mainY = bluePlayer.pos.y - 30;
+        destroy(log);
+        newP = add([
+          sprite("log"),
+          pos(mainX, mainY - 30),
+          area(),
+          origin("center"),
+          follow(bluePlayer, -10), // * i),
+          scale(0.3),
+        ]);
+      }
+    } else if (log.isColliding(redPlayer)) {
+      if (redPlayerData.logCount + 1 == 20) {
+        if (redPlayerData.logCount == 19) {
+          redPlayerData.addLog();
+        }
+        redScore.hidden = true;
+        escape("red");
+      } else {
+        redScore.text = redPlayerData.addLog();
+        let mainX = redPlayer.pos.x;
+        let mainY = redPlayer.pos.y - 30;
+        destroy(log);
+        newP = add([
+          sprite("log"),
+          pos(mainX, mainY - 30),
+          area(),
+          origin("center"),
+          follow(redPlayer, -10), // * i),
+          scale(0.3),
+        ]);
+      }
+    }
+    // if (log.pos.y > height() - 30) {
+    //   log.pos.y = 1;
+    //   log.pos.x = rand(10, width());
+    // }
+  });
+
   //////////////////////////
 
   //////////////////////////
@@ -208,17 +260,13 @@ scene("gamePlay", () => {
     redPlayer.move(redPlayer.speed, 0);
   });
 
-//// player going up on logs
-function climbUpLog (player) {
+  //// player going up on logs
+  function climbUpLog(player) {
+    // then have player go up on the logs (image from google)
+    // don't want the user to go up just have the computer do that
+  }
 
-// then have player go up on the logs (image from google)
-// dont want the user to go up just have the computer do that 
-
- 
-}
-
-
-/////////////////////
+  /////////////////////
 
   /////////////////////////////// SCORES
   /// creating the score numbers visually
@@ -237,63 +285,59 @@ function climbUpLog (player) {
     color(0, 0, 255),
     pos(7 * (width() / 8), height() / 2),
   ]);
-
-  redPlayer.onCollide("log", () => {
-    redPlayerData.logCount++;
-    console.log("red player log count: ", redPlayerData.logCount);
-  });
-
-  bluePlayer.onCollide("log", (log) => {
-    if (bluePlayerData.logCount < 9) {
-      blueScore.text = bluePlayerData.addLog();
-      destroy(log);
-    } else if (bluePlayerData.logCount == 9) {
-      bluePlayerData.addLog();
-      destroy(log);
-      blueScore.hidden = true;
-      escape("blue");
-    }
-  });
-
-  ////////////////////////////////////LOG STACKING
-  for (let i = 0; i < 3; i++) {
-    // pos(rand(width() / 4, 3 * (width() / 4)), 0),
-    const x = rand(width() / 4, 3 * (width() / 4));
-    const y = rand(0, height());
-
-    let log = add([
-      sprite("log"), // sprite() component makes it render as a sprite
-      pos(x, y),
-      area(), // pos() component gives it position, also enables movement        // rotate() component gives it rotation
-      origin("center"),
-      scale(0.3),
-      // origin() component defines the pivot point (defaults to "top left")
-    ]);
-
-    log.onUpdate(() => {
-      log.pos.y += 3;
-      let mainX = bluePlayer.pos.x;
-      let mainY = bluePlayer.pos.y - 30;
-      let newP;
-      if (log.isColliding(bluePlayer)) {
-        destroy(log);
-        newP = add([
-          sprite("log"), // sprite() component makes it render as a sprite
-          pos(mainX, mainY - 30),
-          area(), // pos() component gives it position, also enables movement        // rotate() component gives it rotation
-          origin("center"),
-          follow(bluePlayer, -10 * i),
-          scale(0.3),
-        ]);
-      }
-
-      if (log.pos.y > height() - 30) {
-        log.pos.y = 1;
-        log.pos.x = rand(10, width());
-      }
-    });
-  }
 });
+
+////////////////////////////////////LOG STACKING
+// for (let i = 0; i < 3; i++) {
+//   // pos(rand(width() / 4, 3 * (width() / 4)), 0),
+//   const x = rand(width() / 4, 3 * (width() / 4));
+//   const y = rand(0, height());
+
+//   let log = add([
+//     sprite("log"), // sprite() component makes it render as a sprite
+//     pos(x, y),
+//     area(), // pos() component gives it position, also enables movement        // rotate() component gives it rotation
+//     origin("center"),
+//     scale(0.3),
+//     // origin() component defines the pivot point (defaults to "top left")
+//   ]);
+
+// log.onUpdate(() => {
+//   log.pos.y += 3;
+//   let newP;
+//   if (log.isColliding(bluePlayer)) {
+//     let mainX = bluePlayer.pos.x;
+//     let mainY = bluePlayer.pos.y - 30;
+//     destroy(log);
+//     newP = add([
+//       sprite("log"), // sprite() component makes it render as a sprite
+//       pos(mainX, mainY - 30),
+//       area(), // pos() component gives it position, also enables movement        // rotate() component gives it rotation
+//       origin("center"),
+//       follow(bluePlayer, -10 * i),
+//       scale(0.3),
+//     ]);
+//   } else if (log.isColliding(redPlayer)) {
+//     let mainX = redPlayer.pos.x;
+//     let mainY = redPlayer.pos.y - 30;
+//     destroy(log);
+//     newP = add([
+//       sprite("log"), // sprite() component makes it render as a sprite
+//       pos(mainX, mainY - 30),
+//       area(), // pos() component gives it position, also enables movement        // rotate() component gives it rotation
+//       origin("center"),
+//       follow(redPlayer, -10 * i),
+//       scale(0.3),
+//     ]);
+//       }
+
+//       // if (log.pos.y > height() - 30) {
+//       //   log.pos.y = 1;
+//       //   log.pos.x = rand(10, width());
+//       // }
+//     });
+//   }
+// });
 
 /////////////////////////////////////////////////ESCAPING
 ///conditions met for starting escape, makes the text appear
@@ -377,7 +421,7 @@ scene("titleScreen", () => {
         wavy: (idx, ch) => ({
           pos: vec2(0, wave(-4, 4, time() * 6 + idx * 0.5)),
         }),
-      }
+      },
     }),
     origin("center"),
     pos(width() / 2, height() / 7),
@@ -387,7 +431,6 @@ scene("titleScreen", () => {
   onKeyRelease("enter", () => {
     go("gamePlay");
   });
-
 });
 
 ///////////////////////////////// INSTRUCTIONS SCREEN
@@ -430,9 +473,7 @@ function startGame() {
 }
 startGame();
 
-
-
-////// climbing up tree 
+////// climbing up tree
 
 // const tree = add([
 //   sprite("tree"),
@@ -456,8 +497,3 @@ startGame();
 
 // Start the game loop
 // start();
-
-
-
-
-
