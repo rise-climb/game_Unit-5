@@ -323,11 +323,18 @@ for (let i = 0; i < 3; i++) {
   // origin() component defines the pivot point (defaults to "topleft")
     ])
   
+
+    // one function for both players
   log.onUpdate(() => {
     log.pos.y += 3
     let mainX = bluePlayer.pos.x
     let mainY = bluePlayer.pos.y - 30
     let newP;
+
+    // let redX = redPlayer.pos.x
+    // let redY = redPlayer.pos.y - 30
+    // let newPred;
+
     if (log.isColliding(bluePlayer)){
       destroy(log)
       newP = add([
@@ -338,8 +345,19 @@ for (let i = 0; i < 3; i++) {
       follow(bluePlayer, -10* i ),
       scale(0.3)
     ])	
+
+    // if (log.isColliding(redPlayer)){
+    //   destroy(log)
+    //   newPred = add([
+    //   sprite("log"),   // sprite() component makes it render as a sprite
+    //   pos(redX,redY -30), 
+    //   area(),// pos() component gives it position, also enables movement        // rotate() component gives it rotation
+    //   origin("center"),
+    //   follow(redPlayer, -10* i ),
+    //   scale(0.3)
+    // ])	
       
-    }
+    // }
 
     
     if(log.pos.y > height() -30){
@@ -354,9 +372,30 @@ for (let i = 0; i < 3; i++) {
 
 
 
-////// redGuy
+////// climbing up tree 
 
+// const tree = add([
+//   sprite("tree"),
+//   pos(200, 0),
+// ]);
 
+// // Define the movement function for the character sprite
+// function climb() {
+//   bluePlayer.move(0, -100);
+// }
+
+// // Set up collision detection between the character sprite and the tree object
+// bluePlayer.collides("tree", () => {
+//   // Stop the character's movement and remove the collision detection
+//   bluePlayer.pause();
+//   bluePlayer.collides("tree", null);
+
+//   // Climb the tree
+//   climb();
+// });
+
+// Start the game loop
+// start();
 
 
 
