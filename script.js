@@ -48,10 +48,14 @@ JavaScript Data:
 /// Initializing Kaboom
 //////////
 
+const browserWidth = window.innerWidth;
+const browserHeight = window.innerHeight;
+
 import kaboom from "https://unpkg.com/kaboom/dist/kaboom.mjs";
 kaboom({
-  width:1440,
-  height:835});
+  width: browserWidth,
+  height: browserHeight,
+});
 
 ///////////
 /// Variables
@@ -88,13 +92,14 @@ let background = add([
   sprite("background"),
   pos(width() / 2, height() / 2),
   origin("center"),
-  scale(1), // PUTTING A PIN
+  scale(), // PUTTING A PIN
   // Allow the background to be scaled
   // Keep the background position fixed even when the camera moves
   fixed(),
 ]);
 background.scaleTo(
   Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
+  //Math.max(width() / browserWidth, height() / browserHeight)
 );
 
 const platform = add([
@@ -118,7 +123,6 @@ const rightPlatform = add([
   area(),
   solid(),
 ]);
-
 
 ////
 /////////////////////////
@@ -151,7 +155,6 @@ const redPlayer = add([
     speed: 1200,
     jumpspeed: 2500,
   },
-
 ]);
 
 loadSprite("blueGuy", "./images/FINALblueguyRotated.png");
