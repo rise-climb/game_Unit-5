@@ -314,6 +314,8 @@ for (let i = 0; i < 3; i++) {
   // origin() component defines the pivot point (defaults to "topleft")
     ])
   
+
+    // one function for both players
   log.onUpdate(() => {
     log.pos.y += 3
     let mainX = bluePlayer.pos.x
@@ -343,11 +345,36 @@ for (let i = 0; i < 3; i++) {
 
 }
 
-
-
 ////// redGuy
 
 
+
+
+
+////// climbing up tree 
+
+// const tree = add([
+//   sprite("tree"),
+//   pos(200, 0),
+// ]);
+
+// // Define the movement function for the character sprite
+// function climb() {
+//   bluePlayer.move(0, -100);
+// }
+
+// // Set up collision detection between the character sprite and the tree object
+// bluePlayer.collides("tree", () => {
+//   // Stop the character's movement and remove the collision detection
+//   bluePlayer.pause();
+//   bluePlayer.collides("tree", null);
+
+//   // Climb the tree
+//   climb();
+// });
+
+// // Start the game loop
+// start();
 
 
 
