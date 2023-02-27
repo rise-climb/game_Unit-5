@@ -50,8 +50,8 @@ JavaScript Data:
 
 import kaboom from "https://unpkg.com/kaboom/dist/kaboom.mjs";
 kaboom({
-  width:1024,
-  height:671});
+  width:1440,
+  height:835});
 
 ///////////
 /// Variables
