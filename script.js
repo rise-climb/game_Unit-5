@@ -296,7 +296,6 @@ function escape(player) {
 
 // child.pos = vec2(50, 50); // set child position relative to parent
 // child.parent = parent; // set parent of child sprite
-<<<<<<< HEAD
 // >>>>>>> 347e28c07663fb53d49cdca794df5b1d138c2e96
 
 
@@ -354,5 +353,3 @@ for (let i = 0; i < 3; i++) {
 
 
 
-=======
->>>>>>> f6240a802249cd50097159ecd0d0eca368eb4e62
