@@ -137,7 +137,7 @@ loop(1, () => {
     pos(rand(width() / 4, 3 * (width() / 4)), 0),
     scale(0.3),
     area(),
-    move(DOWN, 200),
+    move(DOWN, 175),
     cleanup(),
     "log",
   ]);
@@ -228,10 +228,10 @@ redPlayer.onCollide("log", () => {
 });
 
 bluePlayer.onCollide("log", (log) => {
-  if (bluePlayerData.logCount < 9) {
+  if (bluePlayerData.logCount < 20) {
     blueScore.text = bluePlayerData.addLog();
     destroy(log);
-  } else if (bluePlayerData.logCount == 9) {
+  } else if (bluePlayerData.logCount == 20) {
     bluePlayerData.addLog();
     destroy(log);
     blueScore.hidden = true;
@@ -321,10 +321,7 @@ for (let i = 0; i < 3; i++) {
     let mainX = bluePlayer.pos.x
     let mainY = bluePlayer.pos.y - 30
     let newP;
-
-    // let redX = redPlayer.pos.x
-    // let redY = redPlayer.pos.y - 30
-    // let newPred;
+    
 
     if (log.isColliding(bluePlayer)){
       destroy(log)
@@ -336,19 +333,7 @@ for (let i = 0; i < 3; i++) {
       follow(bluePlayer, -10* i ),
       scale(0.3)
     ])	
-
-    // if (log.isColliding(redPlayer)){
-    //   destroy(log)
-    //   newPred = add([
-    //   sprite("log"),   // sprite() component makes it render as a sprite
-    //   pos(redX,redY -30), 
-    //   area(),// pos() component gives it position, also enables movement        // rotate() component gives it rotation
-    //   origin("center"),
-    //   follow(redPlayer, -10* i ),
-    //   scale(0.3)
-    // ])	
-      
-    // }
+    }
 
     
     if(log.pos.y > height() -30){
@@ -360,6 +345,10 @@ for (let i = 0; i < 3; i++) {
 
 
 }
+
+////// redGuy
+
+
 
 
 
