@@ -150,6 +150,32 @@ scene("gamePlay", () => {
       jumpspeed: 2500,
     },
   ]);
+loop(1, () => {
+  loadSprite("log", "./images/log.png");
+  add([
+    sprite("log"),
+    pos(rand(width() / 4, 3 * (width() / 4)), 0),
+    scale(0.3),
+    area(),
+    move(DOWN, 175),
+    cleanup(),
+    "log",
+  ]);
+});
+
+loadSprite("redGuy", "./images/FINALredguy.ong.png");
+const redPlayer = add([
+  sprite("redGuy"),
+  scale(0.15),
+  origin("center"),
+  area({ scale: 0.8 }),
+  pos(width() / 3, 0),
+  body(),
+  {
+    speed: 1200,
+    jumpspeed: 2500,
+  },
+]);
 
   const bluePlayer = add([
     sprite("blueGuy"),
@@ -285,7 +311,23 @@ scene("gamePlay", () => {
     color(0, 0, 255),
     pos(7 * (width() / 8), height() / 2),
   ]);
-});
+
+  redPlayer.onCollide("log", () => {
+    redPlayerData.logCount++;
+    console.log("red player log count: ", redPlayerData.logCount);
+  });
+
+  bluePlayer.onCollide("log", (log) => {
+    if (bluePlayerData.logCount < 20) {
+      blueScore.text = bluePlayerData.addLog();
+      destroy(log);
+    } else if (bluePlayerData.logCount == 20) {
+      bluePlayerData.addLog();
+      destroy(log);
+      blueScore.hidden = true;
+      escape("blue");
+    }
+  });
 
 ////////////////////////////////////LOG STACKING
 // for (let i = 0; i < 3; i++) {
