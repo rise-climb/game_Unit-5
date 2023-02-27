@@ -114,7 +114,7 @@ loop(1, () => {
   loadSprite("log", "./images/log.png");
   add([
     sprite("log"),
-    pos(rand(0, width()), 0),
+    pos(rand(width() / 4, 3 * (width() / 4)), 0),
     scale(0.3),
     area(),
     move(DOWN, 200),
@@ -271,35 +271,6 @@ function escape(player) {
 
 ////////////////////////////////////////////////
 
-<<<<<<< HEAD
-
-// Create the player sprite
-// const player = add([
-//   sprite('player'),
-//   pos(0, 0),
-//   origin('center'),
-//   'player'
-// ])
-
-// // Create a function to stack items on top of the player sprite
-// function stackItemsOnPlayer() {
-//   // Find the position of the player sprite
-//   const playerPos = redPlayer.pos
-
-//   // Find all items that are colliding with the player sprite
-//   const collidingItems = get('log').filter(log => log.isColliding(redPlayer))
-
-//   // Set the position of the colliding items to be on top of the player sprite
-//   collidingItems.forEach(log => {
-//     log.pos = playerPos.add(0, -redPlayer.height/2 - log.height/2)
-//   })
-// }
-
-// // Call the stackItemsOnPlayer() function every frame
-// action('redPlayer', stackItemsOnPlayer)
-
-
-=======
 /////
 
 // Create parent sprite
@@ -317,4 +288,60 @@ function escape(player) {
 
 // child.pos = vec2(50, 50); // set child position relative to parent
 // child.parent = parent; // set parent of child sprite
->>>>>>> 347e28c07663fb53d49cdca794df5b1d138c2e96
+// >>>>>>> 347e28c07663fb53d49cdca794df5b1d138c2e96
+
+
+for (let i = 0; i < 3; i++) {
+
+  // pos(rand(width() / 4, 3 * (width() / 4)), 0),
+  const x = rand(width() / 4, 3 * (width() / 4))
+  const y = rand(0, height())
+
+  let log = add([
+      sprite("log"),   // sprite() component makes it render as a sprite
+      pos(x, y), 
+      area(),// pos() component gives it position, also enables movement        // rotate() component gives it rotation
+      origin("center"),
+      scale(0.3)
+  // origin() component defines the pivot point (defaults to "topleft")
+    ])
+  
+  log.onUpdate(() => {
+    log.pos.y += 3
+    let mainX = bluePlayer.pos.x
+    let mainY = bluePlayer.pos.y - 30
+    let newP;
+    if (log.isColliding(bluePlayer)){
+      destroy(log)
+      newP = add([
+      sprite("log"),   // sprite() component makes it render as a sprite
+      pos(mainX,mainY -30), 
+      area(),// pos() component gives it position, also enables movement        // rotate() component gives it rotation
+      origin("center"),
+      follow(bluePlayer, -10* i ),
+      scale(0.3)
+    ])	
+      
+    }
+
+    
+    if(log.pos.y > height() -30){
+      log.pos.y = 1
+      log.pos.x = rand(10, width())
+    }
+
+  })
+
+
+}
+
+
+
+////// redGuy
+
+
+
+
+
+
+
