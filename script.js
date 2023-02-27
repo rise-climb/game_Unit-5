@@ -48,8 +48,14 @@ JavaScript Data:
 /// Initializing Kaboom
 //////////
 
+const browserWidth = window.innerWidth;
+const browserHeight = window.innerHeight;
+
 import kaboom from "https://unpkg.com/kaboom/dist/kaboom.mjs";
-kaboom();
+kaboom({
+  width: browserWidth,
+  height: browserHeight,
+});
 
 ///////////
 /// Variables
@@ -86,19 +92,33 @@ let background = add([
   sprite("background"),
   pos(width() / 2, height() / 2),
   origin("center"),
-  scale(1), // PUTTING A PIN
+  scale(), // PUTTING A PIN
   // Allow the background to be scaled
-  // scale(1.2, 1.13),
   // Keep the background position fixed even when the camera moves
   fixed(),
 ]);
 background.scaleTo(
   Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
+  //Math.max(width() / browserWidth, height() / browserHeight)
 );
 
 const platform = add([
   rect(width(), 50),
   pos(0, height()),
+  outline(4),
+  area(),
+  solid(),
+]);
+const leftPlatform = add([
+  rect(1, height()),
+  pos(0, 0),
+  outline(4),
+  area(),
+  solid(),
+]);
+const rightPlatform = add([
+  rect(1, height()),
+  pos(width(), 0),
   outline(4),
   area(),
   solid(),
@@ -135,8 +155,6 @@ const redPlayer = add([
     speed: 1200,
     jumpspeed: 2500,
   },
-  "player",
-  "red",
 ]);
 
 loadSprite("blueGuy", "./images/FINALblueguyRotated.png");
@@ -151,8 +169,6 @@ const bluePlayer = add([
     speed: 1200,
     jumpspeed: 2500,
   },
-  "player",
-  "blue",
 ]);
 
 //////////////////////////
@@ -206,17 +222,9 @@ const blueScore = add([
   pos(7 * (width() / 8), height() / 2),
 ]);
 
-/// and changing their values on log collision
-redPlayer.onCollide("log", (log) => {
-  if (redPlayerData.logCount < 9) {
-    redScore.text = redPlayerData.addLog();
-    destroy(log);
-  } else if (redPlayerData.logCount == 9) {
-    redPlayerData.addLog();
-    destroy(log);
-    redScore.hidden = true;
-    escape("red");
-  }
+redPlayer.onCollide("log", () => {
+  redPlayerData.logCount++;
+  console.log("red player log count: ", redPlayerData.logCount);
 });
 
 bluePlayer.onCollide("log", (log) => {
@@ -288,6 +296,7 @@ function escape(player) {
 
 // child.pos = vec2(50, 50); // set child position relative to parent
 // child.parent = parent; // set parent of child sprite
+<<<<<<< HEAD
 // >>>>>>> 347e28c07663fb53d49cdca794df5b1d138c2e96
 
 
@@ -345,3 +354,5 @@ for (let i = 0; i < 3; i++) {
 
 
 
+=======
+>>>>>>> f6240a802249cd50097159ecd0d0eca368eb4e62
