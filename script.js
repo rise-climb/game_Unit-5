@@ -335,6 +335,15 @@ function escape(player) {
   }
 }
 
+//when the player is at the cliff (already collided)
+function climbToWin() {
+  //stop character movement
+  //place the log
+  //make the character move up the log
+  //and on to the cliff
+  //and celebrate
+}
+
 ///////////////////////////////// TITLE SCREEN
 scene("titleScreen", () => {
   ///// make background
