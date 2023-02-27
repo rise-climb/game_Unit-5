@@ -57,7 +57,7 @@ kaboom();
 
 class Player {
   constructor() {
-    this.logCount = 7;
+    this.logCount = 0;
     this.hasRock = false;
     this.position = [];
   }
@@ -114,7 +114,7 @@ loop(1, () => {
   add([
     sprite("log"),
     pos(rand(0, width()), 0),
-    scale(0.25),
+    scale(0.3),
     area(),
     move(DOWN, 200),
     cleanup(),
@@ -132,7 +132,7 @@ const redPlayer = add([
   body(),
   {
     speed: 1200,
-    jumpspeed: 1000,
+    jumpspeed: 2500,
   },
 
 ]);
@@ -147,7 +147,7 @@ const bluePlayer = add([
   body(),
   {
     speed: 1200,
-    jumpspeed: 1000,
+    jumpspeed: 2500,
   },
 ]);
 
@@ -158,7 +158,7 @@ const bluePlayer = add([
 
 onKeyPress("i", () => {
   if (bluePlayer.isGrounded()) {
-    bluePlayer.jump();
+    bluePlayer.jump(750);
   }
 });
 
@@ -171,7 +171,7 @@ onKeyDown("l", () => {
 
 onKeyPress("w", () => {
   if (redPlayer.isGrounded()) {
-    redPlayer.jump();
+    redPlayer.jump(750);
   }
 });
 onKeyDown("a", () => {
@@ -180,17 +180,6 @@ onKeyDown("a", () => {
 onKeyDown("d", () => {
   redPlayer.move(redPlayer.speed, 0);
 });
-
-///making the two pass each other
-
-//layers(["normal", "obj", "ui"], "normal");
-
-// collides("red", "blue", () => {
-//   let redPos = redPlayer.pos
-//   redPlayer.pos = bluePlayer.pos
-
-
-// });
 
 ////
 /////////////////////
@@ -218,4 +207,102 @@ redPlayer.onCollide("log", () => {
   console.log("red player log count: ", redPlayerData.logCount);
 });
 
-onCollide("player", "log", () => {});
+bluePlayer.onCollide("log", (log) => {
+  if (bluePlayerData.logCount < 9) {
+    blueScore.text = bluePlayerData.addLog();
+    destroy(log);
+  } else if (bluePlayerData.logCount == 9) {
+    bluePlayerData.addLog();
+    destroy(log);
+    blueScore.hidden = true;
+    escape("blue");
+  }
+});
+
+// child.pos = vec2(50, 50); // set child position relative to parent
+// parent.addChild(child);
+
+///
+////////////////////////////////////////////////
+
+////////////////////  ESCAPING   ////////////////
+///conditions met for starting escape, makes the text appear
+//on the screen and stops adding logs to the players log count
+let redEscape = null;
+let blueEscape = null;
+function escape(player) {
+  if (player == "red") {
+    redEscape = add([
+      text("get to a \n cliff!", {
+        size: 50,
+      }),
+      color(255, 0, 0),
+      pos(width() / 11, height() / 2),
+    ]);
+
+    loop(0.5, () => {
+      redEscape.hidden = !redEscape.hidden;
+    });
+  } else {
+    blueEscape = add([
+      text("get to a \n cliff!", {
+        size: 50,
+      }),
+      color(0, 0, 255),
+      pos(6 * (width() / 7), height() / 2),
+    ]);
+    loop(0.5, () => {
+      blueEscape.hidden = !blueEscape.hidden;
+    });
+  }
+}
+
+////////////////////////////////////////////////
+
+<<<<<<< HEAD
+
+// Create the player sprite
+// const player = add([
+//   sprite('player'),
+//   pos(0, 0),
+//   origin('center'),
+//   'player'
+// ])
+
+// // Create a function to stack items on top of the player sprite
+// function stackItemsOnPlayer() {
+//   // Find the position of the player sprite
+//   const playerPos = redPlayer.pos
+
+//   // Find all items that are colliding with the player sprite
+//   const collidingItems = get('log').filter(log => log.isColliding(redPlayer))
+
+//   // Set the position of the colliding items to be on top of the player sprite
+//   collidingItems.forEach(log => {
+//     log.pos = playerPos.add(0, -redPlayer.height/2 - log.height/2)
+//   })
+// }
+
+// // Call the stackItemsOnPlayer() function every frame
+// action('redPlayer', stackItemsOnPlayer)
+
+
+=======
+/////
+
+// Create parent sprite
+// const parent = add([sprite("parent"), pos(100, 100)]);
+
+// // Create child sprite
+// const child = add([
+//   sprite("child"),
+//   pos(20, 20), // set initial position relative to parent
+// ]);
+
+// // Attach child to parent
+// child.pos = vec2(50, 50); // set child position relative to parent
+// parent.addChild(child);
+
+// child.pos = vec2(50, 50); // set child position relative to parent
+// child.parent = parent; // set parent of child sprite
+>>>>>>> 347e28c07663fb53d49cdca794df5b1d138c2e96
