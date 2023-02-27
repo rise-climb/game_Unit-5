@@ -49,7 +49,9 @@ JavaScript Data:
 //////////
 
 import kaboom from "https://unpkg.com/kaboom/dist/kaboom.mjs";
-kaboom();
+kaboom({
+  width:1024,
+  height:671});
 
 ///////////
 /// Variables
@@ -102,6 +104,21 @@ const platform = add([
   area(),
   solid(),
 ]);
+const leftPlatform = add([
+  rect(1, height()),
+  pos(0, 0),
+  outline(4),
+  area(),
+  solid(),
+]);
+const rightPlatform = add([
+  rect(1, height()),
+  pos(width(), 0),
+  outline(4),
+  area(),
+  solid(),
+]);
+
 
 ////
 /////////////////////////
@@ -259,35 +276,6 @@ function escape(player) {
 
 ////////////////////////////////////////////////
 
-<<<<<<< HEAD
-
-// Create the player sprite
-// const player = add([
-//   sprite('player'),
-//   pos(0, 0),
-//   origin('center'),
-//   'player'
-// ])
-
-// // Create a function to stack items on top of the player sprite
-// function stackItemsOnPlayer() {
-//   // Find the position of the player sprite
-//   const playerPos = redPlayer.pos
-
-//   // Find all items that are colliding with the player sprite
-//   const collidingItems = get('log').filter(log => log.isColliding(redPlayer))
-
-//   // Set the position of the colliding items to be on top of the player sprite
-//   collidingItems.forEach(log => {
-//     log.pos = playerPos.add(0, -redPlayer.height/2 - log.height/2)
-//   })
-// }
-
-// // Call the stackItemsOnPlayer() function every frame
-// action('redPlayer', stackItemsOnPlayer)
-
-
-=======
 /////
 
 // Create parent sprite
@@ -305,4 +293,3 @@ function escape(player) {
 
 // child.pos = vec2(50, 50); // set child position relative to parent
 // child.parent = parent; // set parent of child sprite
->>>>>>> 347e28c07663fb53d49cdca794df5b1d138c2e96
