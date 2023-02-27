@@ -134,7 +134,7 @@ loop(1, () => {
   loadSprite("log", "./images/log.png");
   add([
     sprite("log"),
-    pos(rand(0, width()), 0),
+    pos(rand(width() / 4, 3 * (width() / 4)), 0),
     scale(0.3),
     area(),
     move(DOWN, 200),
