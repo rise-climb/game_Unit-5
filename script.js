@@ -57,7 +57,7 @@ kaboom();
 
 class Player {
   constructor() {
-    this.logCount = 7;
+    this.logCount = 0;
     this.hasRock = false;
     this.position = [];
   }
@@ -115,7 +115,7 @@ loop(1, () => {
   add([
     sprite("log"),
     pos(rand(0, width()), 0),
-    scale(0.25),
+    scale(0.3),
     area(),
     move(DOWN, 200),
     cleanup(),
@@ -133,7 +133,7 @@ const redPlayer = add([
   body(),
   {
     speed: 1200,
-    jumpspeed: 1000,
+    jumpspeed: 2500,
   },
   "player",
   "red",
@@ -149,7 +149,7 @@ const bluePlayer = add([
   body(),
   {
     speed: 1200,
-    jumpspeed: 1000,
+    jumpspeed: 2500,
   },
   "player",
   "blue",
@@ -162,7 +162,7 @@ const bluePlayer = add([
 
 onKeyPress("i", () => {
   if (bluePlayer.isGrounded()) {
-    bluePlayer.jump();
+    bluePlayer.jump(750);
   }
 });
 
@@ -175,7 +175,7 @@ onKeyDown("l", () => {
 
 onKeyPress("w", () => {
   if (redPlayer.isGrounded()) {
-    redPlayer.jump();
+    redPlayer.jump(750);
   }
 });
 onKeyDown("a", () => {
@@ -184,17 +184,6 @@ onKeyDown("a", () => {
 onKeyDown("d", () => {
   redPlayer.move(redPlayer.speed, 0);
 });
-
-///making the two pass each other
-
-//layers(["normal", "obj", "ui"], "normal");
-
-// collides("red", "blue", () => {
-//   let redPos = redPlayer.pos
-//   redPlayer.pos = bluePlayer.pos
-
-
-// });
 
 ////
 /////////////////////
@@ -242,6 +231,9 @@ bluePlayer.onCollide("log", (log) => {
   }
 });
 
+// child.pos = vec2(50, 50); // set child position relative to parent
+// parent.addChild(child);
+
 ///
 ////////////////////////////////////////////////
 
@@ -278,8 +270,8 @@ function escape(player) {
 }
 
 ////////////////////////////////////////////////
-//////CATCHING AND CARRYING LOGS////////
 
+<<<<<<< HEAD
 
 // Create the player sprite
 // const player = add([
@@ -307,3 +299,22 @@ function escape(player) {
 // action('redPlayer', stackItemsOnPlayer)
 
 
+=======
+/////
+
+// Create parent sprite
+// const parent = add([sprite("parent"), pos(100, 100)]);
+
+// // Create child sprite
+// const child = add([
+//   sprite("child"),
+//   pos(20, 20), // set initial position relative to parent
+// ]);
+
+// // Attach child to parent
+// child.pos = vec2(50, 50); // set child position relative to parent
+// parent.addChild(child);
+
+// child.pos = vec2(50, 50); // set child position relative to parent
+// child.parent = parent; // set parent of child sprite
+>>>>>>> 347e28c07663fb53d49cdca794df5b1d138c2e96
