@@ -280,3 +280,30 @@ function escape(player) {
 ////////////////////////////////////////////////
 //////CATCHING AND CARRYING LOGS////////
 
+
+// Create the player sprite
+// const player = add([
+//   sprite('player'),
+//   pos(0, 0),
+//   origin('center'),
+//   'player'
+// ])
+
+// // Create a function to stack items on top of the player sprite
+// function stackItemsOnPlayer() {
+//   // Find the position of the player sprite
+//   const playerPos = redPlayer.pos
+
+//   // Find all items that are colliding with the player sprite
+//   const collidingItems = get('log').filter(log => log.isColliding(redPlayer))
+
+//   // Set the position of the colliding items to be on top of the player sprite
+//   collidingItems.forEach(log => {
+//     log.pos = playerPos.add(0, -redPlayer.height/2 - log.height/2)
+//   })
+// }
+
+// // Call the stackItemsOnPlayer() function every frame
+// action('redPlayer', stackItemsOnPlayer)
+
+
