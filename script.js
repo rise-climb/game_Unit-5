@@ -303,57 +303,7 @@ scene("gamePlay", () => {
     }
   });
 });
-////////////////////////////////////LOG STACKING
-// for (let i = 0; i < 3; i++) {
-//   // pos(rand(width() / 4, 3 * (width() / 4)), 0),
-//   const x = rand(width() / 4, 3 * (width() / 4));
-//   const y = rand(0, height());
 
-//   let log = add([
-//     sprite("log"), // sprite() component makes it render as a sprite
-//     pos(x, y),
-//     area(), // pos() component gives it position, also enables movement        // rotate() component gives it rotation
-//     origin("center"),
-//     scale(0.3),
-//     // origin() component defines the pivot point (defaults to "top left")
-//   ]);
-
-// log.onUpdate(() => {
-//   log.pos.y += 3;
-//   let newP;
-//   if (log.isColliding(bluePlayer)) {
-//     let mainX = bluePlayer.pos.x;
-//     let mainY = bluePlayer.pos.y - 30;
-//     destroy(log);
-//     newP = add([
-//       sprite("log"), // sprite() component makes it render as a sprite
-//       pos(mainX, mainY - 30),
-//       area(), // pos() component gives it position, also enables movement        // rotate() component gives it rotation
-//       origin("center"),
-//       follow(bluePlayer, -10 * i),
-//       scale(0.3),
-//     ]);
-//   } else if (log.isColliding(redPlayer)) {
-//     let mainX = redPlayer.pos.x;
-//     let mainY = redPlayer.pos.y - 30;
-//     destroy(log);
-//     newP = add([
-//       sprite("log"), // sprite() component makes it render as a sprite
-//       pos(mainX, mainY - 30),
-//       area(), // pos() component gives it position, also enables movement        // rotate() component gives it rotation
-//       origin("center"),
-//       follow(redPlayer, -10 * i),
-//       scale(0.3),
-//     ]);
-//       }
-
-//       // if (log.pos.y > height() - 30) {
-//       //   log.pos.y = 1;
-//       //   log.pos.x = rand(10, width());
-//       // }
-//     });
-//   }
-// });
 
 /////////////////////////////////////////////////ESCAPING
 ///conditions met for starting escape, makes the text appear
@@ -527,3 +477,4 @@ startGame();
 
 // Start the game loop
 // start();
+
