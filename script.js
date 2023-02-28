@@ -492,6 +492,11 @@ scene("instructions", () => {
   });
 });
 
+///////////////////////////////// WIN GAME SCREEN/FUNCTION
+function winScreen(player) {
+}
+
+
 /////////////////////////////////// STARTING THE GAME
 function startGame() {
   go("titleScreen");
