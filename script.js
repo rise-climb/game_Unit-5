@@ -247,10 +247,6 @@ scene("gamePlay", () => {
     // }
   });
 
-
-
-
-
   // function bluePlayerGameLogic(log) {
   //   if (log.isColliding(bluePlayer)) {
   //     if (bluePlayerData.logCount < 20) {
@@ -259,7 +255,7 @@ scene("gamePlay", () => {
   //       bluePlayerData.addLog();
   //       blueScore.hidden = true;
   //       escape("blue");
-  //     } 
+  //     }
   //   }
   // }
 
@@ -270,21 +266,16 @@ scene("gamePlay", () => {
   //     } else if (redPlayerData.logCount == 19) {
   //       redPlayerData.addLog();
   //       redScore.hidden = true;
-  //       escape("red");  
+  //       escape("red");
   //     }
-  //   } 
+  //   }
   // }
-
 
   // onUpdate("log", (log) => {
   //     log.pos.y += 3;
   //     redPlayerGameLogic(log);
   //     bluePlayerGameLogic(log);
   //   });
-
-
-
-
 
   //////////////////////////
 
@@ -341,13 +332,10 @@ scene("gamePlay", () => {
     pos(7 * (width() / 8), height() / 2),
   ]);
 
-  redPlayer.onCollide("log", () => {
-    redPlayerData.logCount++;
-    console.log("red player log count: ", redPlayerData.logCount);
-  });
-
-
-
+  // redPlayer.onCollide("log", () => {
+  //   redPlayerData.logCount++;
+  //   console.log("red player log count: ", redPlayerData.logCount);
+  // });
 });
 
 /////////////////////////////////////////////////ESCAPING
@@ -488,7 +476,7 @@ scene("instructions", () => {
     go("gamePlay");
   });
   // add how to information
-  
+
   //
 });
 
