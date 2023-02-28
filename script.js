@@ -62,10 +62,13 @@ kaboom({
 //////////
 
 class Player {
-  constructor() {
+  constructor(color) {
     this.logCount = 0;
     this.hasRock = false;
     this.position = [];
+    this.canEscape = false;
+    this.winner = false;
+    this.color = color;
   }
   addLog() {
     this.logCount++;
@@ -77,8 +80,8 @@ class Player {
   }
 }
 
-const redPlayerData = new Player();
-const bluePlayerData = new Player();
+const redPlayerData = new Player("red");
+const bluePlayerData = new Player("blue");
 
 //loading the background image
 let bgLoad = await loadSprite("background", "images/SUPERFINALBACKGROUND.png");
@@ -125,6 +128,7 @@ scene("gamePlay", () => {
     area(),
     solid(),
     opacity(0),
+    "wall",
   ]);
   const rightPlatform = add([
     rect(1, height()),
@@ -132,6 +136,7 @@ scene("gamePlay", () => {
     area(),
     solid(),
     opacity(0),
+    "wall",
   ]);
 
   /////////////////////////
@@ -247,9 +252,17 @@ scene("gamePlay", () => {
     // }
   });
 
+  redPlayer.onCollide("wall", () => {
+    if (redPlayerData.canEscape && !redPlayerData.winner) {
+      climbToWin(redPlayer, redPlayerData);
+    }
+  });
 
-
-
+  bluePlayer.onCollide("wall", () => {
+    if (bluePlayerData.canEscape && !bluePlayerData.winner) {
+      climbToWin(bluePlayer, bluePlayerData);
+    }
+  });
 
   // function bluePlayerGameLogic(log) {
   //   if (log.isColliding(bluePlayer)) {
@@ -259,7 +272,7 @@ scene("gamePlay", () => {
   //       bluePlayerData.addLog();
   //       blueScore.hidden = true;
   //       escape("blue");
-  //     } 
+  //     }
   //   }
   // }
 
@@ -270,21 +283,16 @@ scene("gamePlay", () => {
   //     } else if (redPlayerData.logCount == 19) {
   //       redPlayerData.addLog();
   //       redScore.hidden = true;
-  //       escape("red");  
+  //       escape("red");
   //     }
-  //   } 
+  //   }
   // }
-
 
   // onUpdate("log", (log) => {
   //     log.pos.y += 3;
   //     redPlayerGameLogic(log);
   //     bluePlayerGameLogic(log);
   //   });
-
-
-
-
 
   //////////////////////////
 
@@ -345,9 +353,6 @@ scene("gamePlay", () => {
   //   redPlayerData.logCount++;
   //   console.log("red player log count: ", redPlayerData.logCount);
   // });
-
-
-
 });
 
 /////////////////////////////////////////////////ESCAPING
@@ -356,6 +361,7 @@ scene("gamePlay", () => {
 function escape(player) {
   if (player == "red") {
     console.log("red escape function went off");
+    redPlayerData.canEscape = true;
     redEscape = add([
       text("get to a \n cliff!", {
         size: 50,
@@ -369,6 +375,7 @@ function escape(player) {
     });
   } else {
     console.log("blue escape function went off");
+    bluePlayerData.canEscape = true;
     blueEscape = add([
       text("get to a \n cliff!", {
         size: 50,
@@ -385,7 +392,9 @@ function escape(player) {
 }
 
 //when the player is at the cliff (already collided)
-function climbToWin() {
+function climbToWin(player, playerData) {
+  playerData.winner = true;
+  console.log(playerData.color);
   //stop character movement
   //place the log
   //make the character move up the log
