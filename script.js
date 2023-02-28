@@ -63,12 +63,13 @@ kaboom({
 
 class Player {
   constructor(color) {
-    this.logCount = 0;
+    this.logCount = 17;
     this.hasRock = false;
     this.position = [];
     this.canEscape = false;
     this.winner = false;
     this.color = color;
+    this.jumpSpeed = 750;
   }
   addLog() {
     this.logCount++;
@@ -150,11 +151,12 @@ scene("gamePlay", () => {
     area({ scale: 0.8 }),
     pos(width() / 3, 0),
     body(),
-    {
-      speed: 1200,
-      jumpspeed: 2500,
-    },
+    { speed: 1200 },
   ]);
+  console.log(redPlayer);
+  console.log(redPlayer.speed);
+  // redPlayer.speed = 0
+  console.log(redPlayer.speed);
 
   const bluePlayer = add([
     sprite("blueGuy"),
@@ -163,10 +165,7 @@ scene("gamePlay", () => {
     area({ scale: 0.8 }),
     pos(2 * (width() / 3), 0),
     body(),
-    {
-      speed: 1200,
-      jumpspeed: 2500,
-    },
+    { speed: 1200 },
   ]);
 
   wait(2, () => {
@@ -298,9 +297,9 @@ scene("gamePlay", () => {
 
   //////////////////////////
   //// player movement
-  onKeyPress("i", () => {
+  const blueJump = onKeyPress("i", () => {
     if (bluePlayer.isGrounded()) {
-      bluePlayer.jump(750);
+      bluePlayer.jump(bluePlayerData.jumpSpeed);
     }
   });
 
@@ -313,7 +312,7 @@ scene("gamePlay", () => {
 
   onKeyPress("w", () => {
     if (redPlayer.isGrounded()) {
-      redPlayer.jump(750);
+      redPlayer.jump(redPlayerData.jumpSpeed);
     }
   });
   onKeyDown("a", () => {
@@ -396,8 +395,16 @@ function climbToWin(player, playerData) {
   playerData.winner = true;
   console.log(playerData.color);
   //stop character movement
+  player.speed = 0;
+  playerData.jumpSpeed = 0;
   //place the log
   //make the character move up the log
+  let stop = height() / 5;
+  //console.log(yPos);
+  console.log(player.pos.y);
+  console.log(stop);
+  player.moveTo(vec2(100, 100), 2);
+  // do something after the sprite has reached its target position
   //and on to the cliff
   //and celebrate
 }
