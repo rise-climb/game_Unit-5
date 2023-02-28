@@ -166,7 +166,6 @@ scene("gamePlay", () => {
 
   wait(2, () => {
     loop(1.5, () => {
-      console.log("log loaded");
       add([
         sprite("log"),
         pos(rand(width() / 4, 3 * (width() / 4)), 0),
@@ -183,14 +182,15 @@ scene("gamePlay", () => {
     log.pos.y += 3;
     let newP;
     if (log.isColliding(bluePlayer)) {
-      if (bluePlayerData.logCount + 1 == 20) {
-        if (bluePlayerData.logCount == 19) {
-          bluePlayerData.addLog();
-        }
-        blueScore.hidden = true;
-        escape("blue");
-      } else {
+      //if they collide with less than 19 logs
+      if (bluePlayerData.logCount < 19) {
+        console.log(
+          "blue collision with <19, log count at: ",
+          bluePlayerData.logCount
+        );
+        //add the log and update the counter
         blueScore.text = bluePlayerData.addLog();
+        //stacking the log on red
         let mainX = bluePlayer.pos.x;
         let mainY = bluePlayer.pos.y - 30;
         destroy(log);
@@ -202,9 +202,25 @@ scene("gamePlay", () => {
           follow(bluePlayer, -10), // * i),
           scale(0.3),
         ]);
+        //if they collide and they have 19 logs
+      } else if (bluePlayerData.logCount == 19) {
+        console.log("collision with 19");
+        //add the 20th log to their data
+        bluePlayerData.addLog();
+        //hide their score
+        blueScore.hidden = true;
+        //and run the "escape" function
+        escape("blue");
+      } else {
+        console.log("else statement??");
+        return;
       }
     } else if (log.isColliding(redPlayer)) {
       if (redPlayerData.logCount + 1 == 20) {
+        console.log(
+          "red collision with <19, log count at: ",
+          redPlayerData.logCount
+        );
         if (redPlayerData.logCount == 19) {
           redPlayerData.addLog();
         }
@@ -304,12 +320,12 @@ scene("gamePlay", () => {
   });
 });
 
-
 /////////////////////////////////////////////////ESCAPING
 ///conditions met for starting escape, makes the text appear
 //on the screen and stops adding logs to the players log count
 function escape(player) {
   if (player == "red") {
+    console.log("red escape function went off");
     redEscape = add([
       text("get to a \n cliff!", {
         size: 50,
@@ -322,6 +338,7 @@ function escape(player) {
       redEscape.hidden = !redEscape.hidden;
     });
   } else {
+    console.log("blue escape function went off");
     blueEscape = add([
       text("get to a \n cliff!", {
         size: 50,
@@ -329,9 +346,11 @@ function escape(player) {
       color(0, 0, 255),
       pos(6 * (width() / 7), height() / 2),
     ]);
+    console.log("blue escape added");
     loop(0.5, () => {
       blueEscape.hidden = !blueEscape.hidden;
     });
+    console.log("blue loop started");
   }
 }
 
@@ -422,7 +441,6 @@ scene("instructions", () => {
   background.scaleTo(
     Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
   );
-
   add([
     text("[Press enter to start].wavy", {
       size: 60,
@@ -436,16 +454,16 @@ scene("instructions", () => {
     pos(width() / 2, height() / 7),
     color(255, 255, 255),
   ]);
-
   onKeyRelease("enter", () => {
     go("gamePlay");
   });
+  // add how to information
+  
+  //
 });
 
 ///////////////////////////////// WIN GAME SCREEN/FUNCTION
-function winScreen(player) {
-}
-
+function winScreen(player) {}
 
 /////////////////////////////////// STARTING THE GAME
 function startGame() {
@@ -477,4 +495,3 @@ startGame();
 
 // Start the game loop
 // start();
-
