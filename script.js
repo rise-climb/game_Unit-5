@@ -341,10 +341,10 @@ scene("gamePlay", () => {
     pos(7 * (width() / 8), height() / 2),
   ]);
 
-  redPlayer.onCollide("log", () => {
-    redPlayerData.logCount++;
-    console.log("red player log count: ", redPlayerData.logCount);
-  });
+  // redPlayer.onCollide("log", () => {
+  //   redPlayerData.logCount++;
+  //   console.log("red player log count: ", redPlayerData.logCount);
+  // });
 
 
 
@@ -487,8 +487,29 @@ scene("instructions", () => {
   onKeyRelease("enter", () => {
     go("gamePlay");
   });
+
   // add how to information
-  
+  add([
+    origin("center"),
+    pos(width() / 2, height() / 2),
+    text("How To Play: \n \n - pick your player \n - collect the logs \n - escape the rocks \n - once you collect 20 logs, run to the cliff and climb up your tree to win! \n \n[A].red  [-].white  [LEFT].white  [-].white  [J].blue \n[D].red  [-].white  [RIGHT].white  [-].white  [L].blue \n[W].red  [-].white  [JUMP].white  [-].white  [I].blue", {
+        size: 36,
+        width: 600,
+        font: "sinko",
+        styles : {
+          "red": {
+            color: rgb (255, 0, 0),
+          },
+          "blue": {
+            color: rgb (0, 0, 255)
+          },
+          "white": {
+            color: rgb (255,255,255)
+          }
+        }
+    }),
+    color(255, 255, 255)
+  ])
   //
 });
 
