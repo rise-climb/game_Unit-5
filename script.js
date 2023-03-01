@@ -416,10 +416,6 @@ function climbToWin(player, playerData, treePos, playerClimbing) {
     "skyLine",
   ]);
   playerData.winner = true;
-  //stop character movement
-  // player.speed = 0;
-  // playerData.jumpSpeed = 0;
-  //place the log
   treePos.y = height() - 25;
   if (treePos.x < width() / 2) {
     side = "left";
@@ -446,11 +442,6 @@ function climbToWin(player, playerData, treePos, playerClimbing) {
       winScreen();
     });
   });
-  //make the character move up the log
-  // player.moveTo((100, 200), 100); //, 1200);
-  // do something after the sprite has reached its target position
-  //and on to the cliff
-  //and celebrate
 }
 
 function celebrate(playerData, side, treePosX) {
@@ -520,13 +511,12 @@ scene("titleScreen", () => {
     go("instructions");
   });
 
-
   add([
     text("[Rise & Climb].wavy", {
       size: 100,
       styles: {
         wavy: (idx, ch) => ({
-        pos: vec2(0, wave(-4, 4, time() * 6 + idx * 0.5))
+          pos: vec2(0, wave(-4, 4, time() * 6 + idx * 0.5)),
         }),
       },
     }),
@@ -535,7 +525,6 @@ scene("titleScreen", () => {
     origin("center"),
   ]);
 
-  
   add([
     text("[Press enter to start].wavy", {
       size: 60,
