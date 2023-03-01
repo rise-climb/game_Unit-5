@@ -63,7 +63,7 @@ kaboom({
 
 class Player {
   constructor(color) {
-    this.logCount = 18;
+    this.logCount = 0;
     this.hasRock = false;
     this.position = [];
     this.canEscape = false;
