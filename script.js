@@ -454,6 +454,22 @@ scene("titleScreen", () => {
     go("instructions");
   });
 
+
+  add([
+    text("[Rise & Climb].wavy", {
+      size: 100,
+      styles: {
+        wavy: (idx, ch) => ({
+        pos: vec2(0, wave(-4, 4, time() * 6 + idx * 0.5))
+        }),
+      },
+    }),
+    area(),
+    pos(center()),
+    origin("center"),
+  ]);
+
+  
   add([
     text("[Press enter to start].wavy", {
       size: 60,
