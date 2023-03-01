@@ -606,7 +606,7 @@ scene("instructions", () => {
 ///////////////////////////////// WIN GAME SCREEN/FUNCTIONl
 function winScreen(player) {
 const restartButton = add([
-  rect(100, 100),
+  rect(400, 100),
   color(0, 0, 0),
   area(),
   origin("center"),
