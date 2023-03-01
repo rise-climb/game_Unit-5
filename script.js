@@ -63,7 +63,7 @@ kaboom({
 
 class Player {
   constructor(color) {
-    this.logCount = 0;
+    this.logCount = 18;
     this.hasRock = false;
     this.position = [];
     this.canEscape = false;
@@ -100,6 +100,8 @@ loadSprite("blueGuy", "./images/FINALblueguyRotated.png");
 loadSprite("tree", "./images/newertree.png");
 loadSprite("blueClimbing", "./images/round-climbing-BlueGuy.png");
 loadSprite("redClimbing", "./images/round-climbing-RedGuy.png");
+loadSprite("rockThrowing", "./images/rock.png");
+loadSprite("rockFalling", "./images/rock.png");
 
 //////// gamePlay scene
 scene("gamePlay", () => {
@@ -157,11 +159,6 @@ scene("gamePlay", () => {
     body(),
     { speed: 1200 },
   ]);
-  console.log(redPlayer);
-  console.log(redPlayer.speed);
-  // redPlayer.speed = 0
-  console.log(redPlayer.speed);
-
   const bluePlayer = add([
     sprite("blueGuy"),
     scale(0.15),
@@ -170,6 +167,24 @@ scene("gamePlay", () => {
     pos(2 * (width() / 3), 0),
     body(),
     { speed: 1200 },
+  ]);
+
+  /////////////////////////////// SCORES
+  /// creating the score numbers visually
+  const redScore = add([
+    text(redPlayerData.logCount, {
+      size: 175,
+    }),
+    color(255, 0, 0),
+    pos(width() / 9, height() / 2),
+  ]);
+
+  const blueScore = add([
+    text(bluePlayerData.logCount, {
+      size: 175,
+    }),
+    color(0, 0, 255),
+    pos(7 * (width() / 8), height() / 2),
   ]);
 
   wait(2, () => {
@@ -184,12 +199,30 @@ scene("gamePlay", () => {
         "log",
       ]);
     });
+
+    wait(5, () => {
+      loop(5, () => {
+        add([
+          sprite("rockFalling"),
+          pos(rand(width() / 4, 3 * (width() / 4)), 0),
+          scale(0.2),
+          area(),
+          move(DOWN, 150),
+          cleanup(),
+          "rockFalling",
+        ]);
+      });
+    });
   });
 
   onUpdate("log", (log) => {
     log.pos.y += 3;
     let newP;
-    if (log.isColliding(bluePlayer)) {
+    if (
+      log.isColliding(bluePlayer) &&
+      bluePlayerData.winner == "not yet" &&
+      redPlayerData.winner == "not yet"
+    ) {
       //if they collide with less than 19 logs
       if (bluePlayerData.logCount < 19) {
         console.log(
@@ -223,7 +256,11 @@ scene("gamePlay", () => {
         console.log("else statement??");
         return;
       }
-    } else if (log.isColliding(redPlayer)) {
+    } else if (
+      log.isColliding(redPlayer) &&
+      bluePlayerData.winner == "not yet" &&
+      redPlayerData.winner == "not yet"
+    ) {
       if (redPlayerData.logCount + 1 == 20) {
         console.log(
           "red collision with <19, log count at: ",
@@ -249,11 +286,56 @@ scene("gamePlay", () => {
         ]);
       }
     }
-    // if (log.pos.y > height() - 30) {
-    //   log.pos.y = 1;
-    //   log.pos.x = rand(10, width());
-    // }
   });
+
+  redPlayer.onCollide("rockFalling", (rockFalling) => {
+    let mainX = redPlayer.pos.x;
+    let mainY = redPlayer.pos.y - 30;
+    destroy(rockFalling);
+    let rockThrowing = add([
+      sprite("rockThrowing"),
+      pos(mainX, mainY - 30),
+      area(),
+      origin("center"),
+      //follow(redPlayer, -10), // * i),
+      //move(),
+      move(bluePlayer.pos.angle(redPlayer.pos), 1200),
+      scale(0.2),
+      "rockThrowing",
+    ]);
+  });
+
+  bluePlayer.onCollide("rockFalling", (rockFalling) => {
+    let mainX = bluePlayer.pos.x;
+    let mainY = bluePlayer.pos.y - 30;
+    destroy(rockFalling);
+    add([
+      sprite("rockThrowing"),
+      pos(mainX, mainY - 30),
+      area(),
+      origin("center"),
+      move(redPlayer.pos.angle(bluePlayer.pos), 1200),
+      scale(0.2),
+      "rockThrowing",
+    ]);
+  });
+
+  // redPlayer.onCollide("rockThrowing", (rockThrowing) => {
+  //   destroy(rockThrowing);
+  //   //add little explosion
+  //   redScore.text = redPlayerData.removeLog();
+  // });
+
+  // add([
+
+  //   sprite("rockThrowing"),
+  //   pos(redPlayer.pos),
+  //   scale(0.2),
+  //   area(),
+  //   //move(bluePlayer.pos.angle(redPlayer.pos), 1500),
+  //   cleanup(),
+  //   "rockThrowing",
+  // ]);
 
   redPlayer.onCollide("wall", (wall) => {
     if (redPlayerData.canEscape && redPlayerData.winner == "not yet") {
@@ -262,7 +344,15 @@ scene("gamePlay", () => {
       if (blueEscape) {
         blueEscape.hidden = true;
       }
-      climbToWin(redPlayer, redPlayerData, wall.pos, "redClimbing");
+      climbToWin(
+        redPlayer,
+        redPlayerData,
+        wall.pos,
+        "redClimbing",
+        bluePlayer,
+        redScore,
+        blueScore
+      );
     }
   });
 
@@ -273,40 +363,17 @@ scene("gamePlay", () => {
       if (redEscape) {
         redEscape.hidden = true;
       }
-      climbToWin(bluePlayer, bluePlayerData, wall.pos, "blueClimbing");
+      climbToWin(
+        bluePlayer,
+        bluePlayerData,
+        wall.pos,
+        "blueClimbing",
+        redPlayer,
+        redScore,
+        blueScore
+      );
     }
   });
-
-  // function bluePlayerGameLogic(log) {
-  //   if (log.isColliding(bluePlayer)) {
-  //     if (bluePlayerData.logCount < 20) {
-  //       blueScore.text = bluePlayerData.addLog();
-  //     } else if (bluePlayerData.logCount == 19) {
-  //       bluePlayerData.addLog();
-  //       blueScore.hidden = true;
-  //       escape("blue");
-  //     }
-  //   }
-  // }
-
-  // function redPlayerGameLogic(log) {
-  //   if(log.isColliding(redPlayer)) {
-  //     if (redPlayerData.logCount < 20) {
-  //       redScore.text = redPlayerData.addLog();
-  //     } else if (redPlayerData.logCount == 19) {
-  //       redPlayerData.addLog();
-  //       redScore.hidden = true;
-  //       escape("red");
-  //     }
-  //   }
-  // }
-
-  // onUpdate("log", (log) => {
-  //     log.pos.y += 3;
-  //     redPlayerGameLogic(log);
-  //     bluePlayerGameLogic(log);
-  //   });
-
   //////////////////////////
 
   //////////////////////////
@@ -335,25 +402,6 @@ scene("gamePlay", () => {
   onKeyDown("d", () => {
     redPlayer.move(redPlayer.speed, 0);
   });
-
-  /////////////////////////////// SCORES
-  /// creating the score numbers visually
-  const redScore = add([
-    text(redPlayerData.logCount, {
-      size: 175,
-    }),
-    color(255, 0, 0),
-    pos(width() / 9, height() / 2),
-  ]);
-
-  const blueScore = add([
-    text(bluePlayerData.logCount, {
-      size: 175,
-    }),
-    color(0, 0, 255),
-    pos(7 * (width() / 8), height() / 2),
-  ]);
-
   // redPlayer.onCollide("log", () => {
   //   redPlayerData.logCount++;
   //   console.log("red player log count: ", redPlayerData.logCount);
@@ -407,7 +455,15 @@ function escape(player) {
 }
 
 //when the player is at the cliff (already collided)
-function climbToWin(player, playerData, treePos, playerClimbing) {
+function climbToWin(
+  player,
+  playerData,
+  treePos,
+  playerClimbing,
+  loser,
+  redScore,
+  blueScore
+) {
   let side;
   let skyLine = add([
     rect(width(), 1),
@@ -440,15 +496,18 @@ function climbToWin(player, playerData, treePos, playerClimbing) {
     destroy(player);
     skyLine.onCollide("winner", (winner) => {
       destroy(winner);
-      celebrate(playerData, side, treePos.x);
-      winScreen("red");
+      celebrate(playerData, side, treePos.x, loser, redScore, blueScore);
+      winScreen(playerData.color);
     });
   });
 }
 
-function celebrate(playerData, side, treePosX) {
+function celebrate(playerData, side, treePosX, loser, redScore, blueScore) {
+  redScore.text = "";
+  blueScore.text = "";
   let celebratingPos = {};
   let winnerColor = "";
+  let loserColor;
   if (side == "left") {
     celebratingPos.x = treePosX - 100;
   } else {
@@ -457,8 +516,10 @@ function celebrate(playerData, side, treePosX) {
   celebratingPos.y = 100;
   if (playerData.color == "red") {
     winnerColor = "redGuy";
+    loserColor = "blueGuy";
   } else {
     winnerColor = "blueGuy";
+    loserColor = "redGuy";
   }
   console.log(winnerColor, celebratingPos);
   add([
@@ -466,6 +527,15 @@ function celebrate(playerData, side, treePosX) {
     scale(0.15),
     origin("center"),
     pos(celebratingPos.x, celebratingPos.y),
+  ]);
+  let layingPosition = loser.pos;
+  destroy(loser);
+  add([
+    sprite(loserColor),
+    scale(0.15),
+    origin("center"),
+    rotate(90),
+    pos(layingPosition.x, layingPosition.y),
   ]);
 }
 ///////////////////////////////// TITLE SCREEN
