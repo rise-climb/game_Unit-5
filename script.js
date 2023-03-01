@@ -617,6 +617,34 @@ scene("instructions", () => {
 function winScreen(player) {
 
 }
+// const restartButton = add([
+//   rect(500, 100),
+//   color(0, 0, 0),
+//   area(),
+//   origin("center"),
+//   pos(width() / 2, 6 * (height() / 7)),
+//   "restart",
+// ]);
+
+// add([
+//   text("[Restart]", {
+//     size: 60,
+//     styles: {
+//       wavy: (idx, ch) => ({
+//         pos: vec2(0, wave(-4, 4, time() * 6 + idx * 0.5)),
+//       }),
+//     },
+//   }),
+//   area(),
+//   origin("center"),
+//   pos(instructButton.pos),
+//   "Restart",
+// ]);
+
+// onClick("restart", () => {
+//   go("instructions");
+// });
+
 
 /////////////////////////////////// STARTING THE GAME
 function startGame() {
