@@ -63,7 +63,7 @@ kaboom({
 
 class Player {
   constructor(color) {
-    this.logCount = 0;
+    this.logCount = 18;
     this.hasRock = false;
     this.position = [];
     this.canEscape = false;
@@ -81,8 +81,8 @@ class Player {
   }
 }
 
-const redPlayerData = new Player("red");
-const bluePlayerData = new Player("blue");
+let redPlayerData;
+let bluePlayerData;
 
 //loading the background image
 let bgLoad = await loadSprite("background", "images/SUPERFINALBACKGROUND.png");
@@ -103,6 +103,8 @@ loadSprite("redClimbing", "./images/round-climbing-RedGuy.png");
 
 //////// gamePlay scene
 scene("gamePlay", () => {
+  redPlayerData = new Player("red");
+  bluePlayerData = new Player("blue");
   ///// make background
   let background = add([
     sprite("background"),
@@ -575,7 +577,6 @@ scene("instructions", () => {
     go("gamePlay");
   });
 
-
   add([
     origin("center"),
     pos(width() / 2, height() / 2),
@@ -584,7 +585,6 @@ scene("instructions", () => {
       {
         size: 36,
         width: 600,
-        font: "sinko",
         styles: {
           red: {
             color: rgb(255, 0, 0),
@@ -598,42 +598,39 @@ scene("instructions", () => {
         },
       }
     ),
-    color(255, 255, 255),
   ]);
-  //
 });
 
 ///////////////////////////////// WIN GAME SCREEN/FUNCTIONl
 function winScreen(player) {
-const restartButton = add([
-  rect(100, 100),
-  color(0, 0, 0),
-  area(),
-  origin("center"),
-  pos(width() / 2, 6 * (height() / 7)),
-  "restart",
-]);
+  const restartButton = add([
+    rect(100, 100),
+    color(0, 0, 0),
+    area(),
+    origin("center"),
+    pos(width() / 2, 6 * (height() / 7)),
+    "restart",
+  ]);
 
-add([
-  text("[Restart]", {
-    size: 60,
-    styles: {
-      wavy: (idx, ch) => ({
-        pos: vec2(0, wave(-4, 4, time() * 6 + idx * 0.5)),
-      }),
-    },
-  }),
-  area(),
-  origin("center"),
-  pos(restartButton.pos),
-  "Restart",
-]);
+  add([
+    text("[Restart]", {
+      size: 60,
+      styles: {
+        wavy: (idx, ch) => ({
+          pos: vec2(0, wave(-4, 4, time() * 6 + idx * 0.5)),
+        }),
+      },
+    }),
+    area(),
 
-onClick("restart", () => {
-  go("gamePlay");
-});
+    pos(restartButton.pos),
+    "Restart",
+  ]);
+
+  onClick("restart", () => {
+    go("gamePlay");
+  });
 }
-
 
 /////////////////////////////////// STARTING THE GAME
 function startGame() {
