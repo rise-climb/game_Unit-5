@@ -520,7 +520,7 @@ scene("instructions", () => {
     go("gamePlay");
   });
 
-  // add how to information
+
   add([
     origin("center"),
     pos(width() / 2, height() / 2),
@@ -545,8 +545,10 @@ scene("instructions", () => {
   //
 });
 
-///////////////////////////////// WIN GAME SCREEN/FUNCTION
-function winScreen(player) {}
+///////////////////////////////// WIN GAME SCREEN/FUNCTIONl
+function winScreen(player) {
+
+}
 
 /////////////////////////////////// STARTING THE GAME
 function startGame() {
