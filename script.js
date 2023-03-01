@@ -63,7 +63,7 @@ kaboom({
 
 class Player {
   constructor(color) {
-    this.logCount = 18;
+    this.logCount = 0;
     this.hasRock = false;
     this.position = [];
     this.canEscape = false;
@@ -606,7 +606,7 @@ scene("instructions", () => {
 ///////////////////////////////// WIN GAME SCREEN/FUNCTIONl
 function winScreen(player) {
 const restartButton = add([
-  rect(500, 100),
+  rect(100, 100),
   color(0, 0, 0),
   area(),
   origin("center"),
