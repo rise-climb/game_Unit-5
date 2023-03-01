@@ -63,7 +63,7 @@ kaboom({
 
 class Player {
   constructor(color) {
-    this.logCount = 18;
+    this.logCount = 0;
     this.hasRock = false;
     this.position = [];
     this.canEscape = false;
@@ -81,8 +81,8 @@ class Player {
   }
 }
 
-let redPlayerData;
-let bluePlayerData;
+let redPlayerData = new Player("red");
+let bluePlayerData = new Player("blue");
 
 //loading the background image
 let bgLoad = await loadSprite("background", "images/SUPERFINALBACKGROUND.png");
@@ -441,7 +441,7 @@ function climbToWin(player, playerData, treePos, playerClimbing) {
     skyLine.onCollide("winner", (winner) => {
       destroy(winner);
       celebrate(playerData, side, treePos.x);
-      winScreen();
+      winScreen("red");
     });
   });
 }
@@ -527,8 +527,17 @@ scene("titleScreen", () => {
     origin("center"),
   ]);
 
+  let startButton = add([
+    rect(400, 100),
+    color(0, 0, 0),
+    area(),
+    origin("center"),
+    pos(width() / 2, height() / 7),
+    "startButton",
+  ]);
+
   add([
-    text("[Press enter to start].wavy", {
+    text("[Start Game].wavy", {
       size: 60,
       styles: {
         wavy: (idx, ch) => ({
@@ -536,12 +545,14 @@ scene("titleScreen", () => {
         }),
       },
     }),
+    area(),
     origin("center"),
-    pos(width() / 2, height() / 7),
+    pos(startButton.pos),
     color(255, 255, 255),
+    "startButton",
   ]);
 
-  onKeyRelease("enter", () => {
+  onClick("startButton", () => {
     go("gamePlay");
   });
 });
@@ -602,15 +613,32 @@ scene("instructions", () => {
 });
 
 ///////////////////////////////// WIN GAME SCREEN/FUNCTIONl
-function winScreen(player) {
-const restartButton = add([
-  rect(400, 100),
-  color(0, 0, 0),
-  area(),
-  origin("center"),
-  pos(width() / 2, 6 * (height() / 7)),
-  "restart",
-]);
+function winScreen(playerColor) {
+  const restartButton = add([
+    rect(400, 100),
+    color(0, 0, 0),
+    area(),
+    origin("center"),
+    pos(width() / 2, 5 * (height() / 7)),
+    "restart",
+  ]);
+
+  add([
+    text("[press enter to go to title screen].wavy", {
+      size: 30,
+      styles: {
+        wavy: (idx, ch) => ({
+          pos: vec2(0, wave(-4, 4, time() * 6 + idx * 0.5)),
+        }),
+      },
+    }),
+    origin("center"),
+    pos(width() / 2, height() / 7),
+    color(255, 255, 255),
+  ]);
+  onKeyRelease("enter", () => {
+    go("titleScreen");
+  });
 
   add([
     text("[Restart]", {
@@ -622,9 +650,15 @@ const restartButton = add([
       },
     }),
     area(),
-
+    origin("center"),
     pos(restartButton.pos),
     "Restart",
+  ]);
+
+  add([
+    text(`${playerColor} player wins!`),
+    origin("bot"),
+    pos(width() / 2, height() / 2),
   ]);
 
   onClick("restart", () => {
