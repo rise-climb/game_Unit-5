@@ -63,11 +63,11 @@ kaboom({
 
 class Player {
   constructor(color) {
-    this.logCount = 17;
+    this.logCount = 18;
     this.hasRock = false;
     this.position = [];
     this.canEscape = false;
-    this.winner = false;
+    this.winner = "not yet";
     this.color = color;
     this.jumpSpeed = 750;
   }
@@ -90,7 +90,6 @@ let bgLoad = await loadSprite("background", "images/SUPERFINALBACKGROUND.png");
 //for escaping
 let redEscape = null;
 let blueEscape = null;
-
 ///////////
 /// loadings assets
 //////////
@@ -98,6 +97,9 @@ let blueEscape = null;
 loadSprite("log", "./images/log.png");
 loadSprite("redGuy", "./images/FINALredguy.ong.png");
 loadSprite("blueGuy", "./images/FINALblueguyRotated.png");
+loadSprite("tree", "./images/newertree.png");
+loadSprite("blueClimbing", "./images/round-climbing-BlueGuy.png");
+loadSprite("redClimbing", "./images/round-climbing-RedGuy.png");
 
 //////// gamePlay scene
 scene("gamePlay", () => {
@@ -251,15 +253,25 @@ scene("gamePlay", () => {
     // }
   });
 
-  redPlayer.onCollide("wall", () => {
-    if (redPlayerData.canEscape && !redPlayerData.winner) {
-      climbToWin(redPlayer, redPlayerData);
+  redPlayer.onCollide("wall", (wall) => {
+    if (redPlayerData.canEscape && redPlayerData.winner == "not yet") {
+      bluePlayerData.winner = "too late :(";
+      redEscape.hidden = true;
+      if (blueEscape) {
+        blueEscape.hidden = true;
+      }
+      climbToWin(redPlayer, redPlayerData, wall.pos, "redClimbing");
     }
   });
 
-  bluePlayer.onCollide("wall", () => {
-    if (bluePlayerData.canEscape && !bluePlayerData.winner) {
-      climbToWin(bluePlayer, bluePlayerData);
+  bluePlayer.onCollide("wall", (wall) => {
+    if (bluePlayerData.canEscape && bluePlayerData.winner == "not yet") {
+      redPlayerData.winner = "too late :(";
+      blueEscape.hidden = true;
+      if (redEscape) {
+        redEscape.hidden = true;
+      }
+      climbToWin(bluePlayer, bluePlayerData, wall.pos, "blueClimbing");
     }
   });
 
@@ -322,14 +334,6 @@ scene("gamePlay", () => {
     redPlayer.move(redPlayer.speed, 0);
   });
 
-  //// player going up on logs
-  function climbUpLog(player) {
-    // then have player go up on the logs (image from google)
-    // don't want the user to go up just have the computer do that
-  }
-
-  /////////////////////
-
   /////////////////////////////// SCORES
   /// creating the score numbers visually
   const redScore = add([
@@ -370,7 +374,12 @@ function escape(player) {
     ]);
 
     loop(0.5, () => {
-      redEscape.hidden = !redEscape.hidden;
+      if (
+        redPlayerData.winner != "too late :(" &&
+        bluePlayerData.winner != "too late :("
+      ) {
+        redEscape.hidden = !redEscape.hidden;
+      }
     });
   } else {
     console.log("blue escape function went off");
@@ -384,31 +393,87 @@ function escape(player) {
     ]);
     console.log("blue escape added");
     loop(0.5, () => {
-      blueEscape.hidden = !blueEscape.hidden;
+      if (
+        redPlayerData.winner != "too late :(" &&
+        bluePlayerData.winner != "too late :("
+      ) {
+        blueEscape.hidden = !blueEscape.hidden;
+      }
     });
     console.log("blue loop started");
   }
 }
 
 //when the player is at the cliff (already collided)
-function climbToWin(player, playerData) {
+function climbToWin(player, playerData, treePos, playerClimbing) {
+  let side;
+  let skyLine = add([
+    rect(width(), 1),
+    pos(0, 10),
+    area(),
+    solid(),
+    opacity(0),
+    "skyLine",
+  ]);
   playerData.winner = true;
-  console.log(playerData.color);
   //stop character movement
-  player.speed = 0;
-  playerData.jumpSpeed = 0;
+  // player.speed = 0;
+  // playerData.jumpSpeed = 0;
   //place the log
+  treePos.y = height() - 25;
+  if (treePos.x < width() / 2) {
+    side = "left";
+    treePos.x += 150;
+  } else {
+    side = "right";
+    treePos.x -= 175;
+  }
+  add([sprite("tree"), scale(0.6, 0.95), origin("bot"), pos(treePos)]);
+  wait(0.5, () => {
+    add([
+      sprite(playerClimbing),
+      scale(0.3),
+      origin("center"),
+      pos(treePos.x, treePos.y - 35),
+      area(),
+      move(UP, 200),
+      "winner",
+    ]);
+    destroy(player);
+    skyLine.onCollide("winner", (winner) => {
+      destroy(winner);
+      celebrate(playerData, side, treePos.x);
+    });
+  });
   //make the character move up the log
-  let stop = height() / 5;
-  //console.log(yPos);
-  console.log(player.pos.y);
-  console.log(stop);
-  player.moveTo(vec2(100, 100), 2);
+  // player.moveTo((100, 200), 100); //, 1200);
   // do something after the sprite has reached its target position
   //and on to the cliff
   //and celebrate
 }
 
+function celebrate(playerData, side, treePosX) {
+  let celebratingPos = {};
+  let winnerColor = "";
+  if (side == "left") {
+    celebratingPos.x = treePosX - 100;
+  } else {
+    celebratingPos.x = treePosX + 100;
+  }
+  celebratingPos.y = 100;
+  if (playerData.color == "red") {
+    winnerColor = "redGuy";
+  } else {
+    winnerColor = "blueGuy";
+  }
+  console.log(winnerColor, celebratingPos);
+  add([
+    sprite(winnerColor),
+    scale(0.15),
+    origin("center"),
+    pos(celebratingPos.x, celebratingPos.y),
+  ]);
+}
 ///////////////////////////////// TITLE SCREEN
 scene("titleScreen", () => {
   ///// make background
@@ -524,24 +589,27 @@ scene("instructions", () => {
   add([
     origin("center"),
     pos(width() / 2, height() / 2),
-    text("How To Play: \n \n - pick your player \n - collect the logs \n - escape the rocks \n - once you collect 20 logs, run to the cliff and climb up your tree to win! \n \n[A].red  [-].white  [LEFT].white  [-].white  [J].blue \n[D].red  [-].white  [RIGHT].white  [-].white  [L].blue \n[W].red  [-].white  [JUMP].white  [-].white  [I].blue", {
+    text(
+      "How To Play: \n \n - pick your player \n - collect the logs \n - escape the rocks \n - once you collect 20 logs, run to the cliff and climb up your tree to win! \n \n[A].red  [-].white  [LEFT].white  [-].white  [J].blue \n[D].red  [-].white  [RIGHT].white  [-].white  [L].blue \n[W].red  [-].white  [JUMP].white  [-].white  [I].blue",
+      {
         size: 36,
         width: 600,
         font: "sinko",
-        styles : {
-          "red": {
-            color: rgb (255, 0, 0),
+        styles: {
+          red: {
+            color: rgb(255, 0, 0),
           },
-          "blue": {
-            color: rgb (0, 0, 255)
+          blue: {
+            color: rgb(0, 0, 255),
           },
-          "white": {
-            color: rgb (255,255,255)
-          }
-        }
-    }),
-    color(255, 255, 255)
-  ])
+          white: {
+            color: rgb(255, 255, 255),
+          },
+        },
+      }
+    ),
+    color(255, 255, 255),
+  ]);
   //
 });
 
