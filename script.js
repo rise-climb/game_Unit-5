@@ -603,14 +603,14 @@ scene("instructions", () => {
 
 ///////////////////////////////// WIN GAME SCREEN/FUNCTIONl
 function winScreen(player) {
-  const restartButton = add([
-    rect(100, 100),
-    color(0, 0, 0),
-    area(),
-    origin("center"),
-    pos(width() / 2, 6 * (height() / 7)),
-    "restart",
-  ]);
+const restartButton = add([
+  rect(400, 100),
+  color(0, 0, 0),
+  area(),
+  origin("center"),
+  pos(width() / 2, 6 * (height() / 7)),
+  "restart",
+]);
 
   add([
     text("[Restart]", {
