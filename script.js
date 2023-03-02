@@ -86,12 +86,11 @@ class Player {
 
 let redPlayerData = new Player("red");
 let bluePlayerData = new Player("blue");
-
 let bgLoad = await loadSprite("background", "images/SUPERFINALBACKGROUND.png");
-
 let redEscape = null;
 let blueEscape = null;
 
+///Kaboom loading sprites
 loadSprite("log", "./images/log.png");
 loadSprite("redGuy", "./images/FINALredguy.ong.png");
 loadSprite("blueGuy", "./images/FINALblueguyRotated.png");
@@ -100,10 +99,13 @@ loadSprite("blueClimbing", "./images/round-climbing-BlueGuy.png");
 loadSprite("redClimbing", "./images/round-climbing-RedGuy.png");
 loadSprite("rock", "./images/rock.png");
 
+/// Game Play Scene
 scene("gamePlay", () => {
+  /// instantiating player data
   redPlayerData = new Player("red");
   bluePlayerData = new Player("blue");
 
+  /// adding sprites and backgrounds
   let background = add([
     sprite("background"),
     pos(width() / 2, height() / 2),
@@ -113,7 +115,6 @@ scene("gamePlay", () => {
   ]);
   background.scaleTo(
     Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
-    //Math.max(width() / browserWidth, height() / browserHeight)
   );
 
   const platform = add([
@@ -178,6 +179,7 @@ scene("gamePlay", () => {
     pos(7 * (width() / 8), height() / 2),
   ]);
 
+  /// falling logs and rocks
   wait(2, () => {
     loop(1.5, () => {
       add([
@@ -209,6 +211,7 @@ scene("gamePlay", () => {
     });
   });
 
+  /// carrying logs on player + scoring
   onUpdate("log", (log) => {
     log.pos.y += 3;
     let newP;
@@ -218,17 +221,10 @@ scene("gamePlay", () => {
       redPlayerData.winner == "not yet"
     ) {
       if (bluePlayerData.logCount < 19) {
-        console.log(
-          "blue collision with <19, log count at: ",
-          bluePlayerData.logCount
-        );
-
         blueScore.text = bluePlayerData.addLog();
-
         let mainX = bluePlayer.pos.x;
         let mainY = bluePlayer.pos.y - 30;
         destroy(log);
-
         newP = add([
           sprite("log"),
           pos(mainX, mainY - 30),
@@ -239,15 +235,10 @@ scene("gamePlay", () => {
           "carriedLog",
         ]);
       } else if (bluePlayerData.logCount == 19) {
-        console.log("collision with 19");
-
         bluePlayerData.addLog();
-
         blueScore.hidden = true;
-
         escape("blue");
       } else {
-        console.log("else statement??");
         return;
       }
     } else if (
@@ -256,10 +247,6 @@ scene("gamePlay", () => {
       redPlayerData.winner == "not yet"
     ) {
       if (redPlayerData.logCount + 1 == 20) {
-        console.log(
-          "red collision with <19, log count at: ",
-          redPlayerData.logCount
-        );
         if (redPlayerData.logCount == 19) {
           redPlayerData.addLog();
         }
@@ -283,6 +270,7 @@ scene("gamePlay", () => {
     }
   });
 
+  /// rock collisions
   redPlayer.onCollide("rock", (rockFalling) => {
     if (bluePlayerData.threwRock) {
       destroy(rockFalling);
@@ -329,12 +317,7 @@ scene("gamePlay", () => {
     }
   });
 
-  // redPlayer.onCollide("projectile", (projectile) => {
-  //   console.log("are you even here");
-  //   destroy(projectile);
-  //   redScore.text = redPlayerData.removeLog();
-  // });
-
+  /// wall collision
   redPlayer.onCollide("wall", (wall) => {
     if (redPlayerData.canEscape && redPlayerData.winner == "not yet") {
       bluePlayerData.winner = "too late :(";
@@ -373,6 +356,7 @@ scene("gamePlay", () => {
     }
   });
 
+  /// player movement
   const blueJump = onKeyPress("i", () => {
     if (bluePlayer.isGrounded()) {
       bluePlayer.jump(bluePlayerData.jumpSpeed);
@@ -400,11 +384,11 @@ scene("gamePlay", () => {
   });
 });
 
-///conditions met for starting escape, makes the text appear
-//on the screen and stops adding logs to the players log count
+///// HELPER FUNCTIONS
+
+/// escape - player has enough logs to try and escape
 function escape(player) {
   if (player == "red") {
-    console.log("red escape function went off");
     redPlayerData.canEscape = true;
     redEscape = add([
       text("get to a \n cliff!", {
@@ -423,7 +407,6 @@ function escape(player) {
       }
     });
   } else {
-    console.log("blue escape function went off");
     bluePlayerData.canEscape = true;
     blueEscape = add([
       text("get to a \n cliff!", {
@@ -432,7 +415,6 @@ function escape(player) {
       color(0, 0, 255),
       pos(6 * (width() / 7), height() / 2),
     ]);
-    console.log("blue escape added");
     loop(0.5, () => {
       if (
         redPlayerData.winner != "too late :(" &&
@@ -441,10 +423,10 @@ function escape(player) {
         blueEscape.hidden = !blueEscape.hidden;
       }
     });
-    console.log("blue loop started");
   }
 }
 
+/// climb to win - player has already won, sets the stage to make them climb up the log and disables more game play
 function climbToWin(
   player,
   playerData,
@@ -494,6 +476,7 @@ function climbToWin(
   });
 }
 
+/// celebrate - makes them actually climb the log
 function celebrate(playerData, side, treePosX, loser, redScore, blueScore) {
   redScore.text = "";
   blueScore.text = "";
@@ -530,6 +513,8 @@ function celebrate(playerData, side, treePosX, loser, redScore, blueScore) {
     pos(layingPosition.x, layingPosition.y),
   ]);
 }
+
+///// OTHER SCENES
 
 scene("titleScreen", () => {
   let background = add([
