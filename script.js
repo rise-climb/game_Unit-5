@@ -100,7 +100,6 @@ loadSprite("blueClimbing", "./images/round-climbing-BlueGuy.png");
 loadSprite("redClimbing", "./images/round-climbing-RedGuy.png");
 loadSprite("rock", "./images/rock.png");
 
-
 scene("gamePlay", () => {
   redPlayerData = new Player("red");
   bluePlayerData = new Player("blue");
@@ -116,7 +115,7 @@ scene("gamePlay", () => {
     Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
     //Math.max(width() / browserWidth, height() / browserHeight)
   );
- 
+
   const platform = add([
     rect(width(), 50),
     pos(0, height()),
@@ -218,7 +217,6 @@ scene("gamePlay", () => {
       bluePlayerData.winner == "not yet" &&
       redPlayerData.winner == "not yet"
     ) {
-  
       if (bluePlayerData.logCount < 19) {
         console.log(
           "blue collision with <19, log count at: ",
@@ -240,7 +238,6 @@ scene("gamePlay", () => {
           scale(0.3),
           "carriedLog",
         ]);
-
       } else if (bluePlayerData.logCount == 19) {
         console.log("collision with 19");
 
@@ -534,9 +531,7 @@ function celebrate(playerData, side, treePosX, loser, redScore, blueScore) {
   ]);
 }
 
-
 scene("titleScreen", () => {
-
   let background = add([
     sprite("background"),
     pos(width() / 2, height() / 2),
@@ -547,7 +542,6 @@ scene("titleScreen", () => {
   background.scaleTo(
     Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
   );
-
 
   const instructButton = add([
     rect(500, 100),
@@ -621,7 +615,6 @@ scene("titleScreen", () => {
   });
 });
 
-
 scene("instructions", () => {
   let background = add([
     sprite("background"),
@@ -656,7 +649,7 @@ scene("instructions", () => {
     text(
       "How To Play: \n \n - pick your player \n - collect the logs \n - catch the rocks, and throw them at your opponent \n - once you collect 20 logs, run to the cliff and climb up your tree to win! \n \n[A].red  [-].white  [LEFT].white  [-].white  [J].blue \n[D].red  [-].white  [RIGHT].white  [-].white  [L].blue \n[W].red  [-].white  [JUMP].white  [-].white  [I].blue",
       {
-        size: 36,
+        size: 40,
         width: 600,
         styles: {
           red: {
@@ -673,7 +666,6 @@ scene("instructions", () => {
     ),
   ]);
 });
-
 
 function winScreen(playerColor) {
   const restartButton = add([
@@ -727,7 +719,6 @@ function winScreen(playerColor) {
     go("gamePlay");
   });
 }
-
 
 function startGame() {
   go("titleScreen");
