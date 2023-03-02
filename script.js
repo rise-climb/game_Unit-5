@@ -63,20 +63,23 @@ kaboom({
 
 class Player {
   constructor(color) {
-    this.logCount = 18;
+    this.logCount = 0;
     this.hasRock = false;
     this.position = [];
     this.canEscape = false;
     this.winner = "not yet";
     this.color = color;
     this.jumpSpeed = 750;
+    this.threwRock = false;
   }
   addLog() {
     this.logCount++;
     return this.logCount;
   }
   removeLog() {
-    this.logCount--;
+    if (this.logCount > 0) {
+      this.logCount--;
+    }
     return this.logCount;
   }
 }
@@ -100,8 +103,7 @@ loadSprite("blueGuy", "./images/FINALblueguyRotated.png");
 loadSprite("tree", "./images/newertree.png");
 loadSprite("blueClimbing", "./images/round-climbing-BlueGuy.png");
 loadSprite("redClimbing", "./images/round-climbing-RedGuy.png");
-loadSprite("rockThrowing", "./images/rock.png");
-loadSprite("rockFalling", "./images/rock.png");
+loadSprite("rock", "./images/rock.png");
 
 //////// gamePlay scene
 scene("gamePlay", () => {
@@ -203,13 +205,16 @@ scene("gamePlay", () => {
     wait(5, () => {
       loop(5, () => {
         add([
-          sprite("rockFalling"),
+          sprite("rock"),
           pos(rand(width() / 4, 3 * (width() / 4)), 0),
           scale(0.2),
           area(),
           move(DOWN, 150),
           cleanup(),
-          "rockFalling",
+          "rock",
+          {
+            thrown: false,
+          },
         ]);
       });
     });
@@ -242,6 +247,7 @@ scene("gamePlay", () => {
           origin("center"),
           follow(bluePlayer, -10), // * i),
           scale(0.3),
+          "carriedLog",
         ]);
         //if they collide and they have 19 logs
       } else if (bluePlayerData.logCount == 19) {
@@ -283,59 +289,63 @@ scene("gamePlay", () => {
           origin("center"),
           follow(redPlayer, -10), // * i),
           scale(0.3),
+          "carriedLog",
         ]);
       }
     }
   });
 
-  redPlayer.onCollide("rockFalling", (rockFalling) => {
-    let mainX = redPlayer.pos.x;
-    let mainY = redPlayer.pos.y - 30;
-    destroy(rockFalling);
-    let rockThrowing = add([
-      sprite("rockThrowing"),
-      pos(mainX, mainY - 30),
-      area(),
-      origin("center"),
-      //follow(redPlayer, -10), // * i),
-      //move(),
-      move(bluePlayer.pos.angle(redPlayer.pos), 1200),
-      scale(0.2),
-      "rockThrowing",
-    ]);
+  redPlayer.onCollide("rock", (rockFalling) => {
+    if (bluePlayerData.threwRock) {
+      destroy(rockFalling);
+      redScore.text = redPlayerData.removeLog();
+      bluePlayerData.threwRock = false;
+    } else {
+      redPlayerData.threwRock = true;
+      let mainX = redPlayer.pos.x;
+      let mainY = redPlayer.pos.y - 30;
+      destroy(rockFalling);
+      add([
+        sprite("rock"),
+        pos(mainX, mainY - 30),
+        area(),
+        origin("center"),
+        move(bluePlayer.pos.angle(redPlayer.pos), 1200),
+        scale(0.18),
+        cleanup(),
+        "rock",
+      ]);
+    }
   });
 
-  bluePlayer.onCollide("rockFalling", (rockFalling) => {
-    let mainX = bluePlayer.pos.x;
-    let mainY = bluePlayer.pos.y - 30;
-    destroy(rockFalling);
-    add([
-      sprite("rockThrowing"),
-      pos(mainX, mainY - 30),
-      area(),
-      origin("center"),
-      move(redPlayer.pos.angle(bluePlayer.pos), 1200),
-      scale(0.2),
-      "rockThrowing",
-    ]);
+  bluePlayer.onCollide("rock", (rockFalling) => {
+    if (redPlayerData.threwRock) {
+      destroy(rockFalling);
+      blueScore.text = bluePlayerData.removeLog();
+      redPlayerData.threwRock = false;
+    } else {
+      bluePlayerData.threwRock = true;
+      let mainX = bluePlayer.pos.x;
+      let mainY = bluePlayer.pos.y - 30;
+      destroy(rockFalling);
+      add([
+        sprite("rock"),
+        pos(mainX, mainY - 30),
+        area(),
+        origin("center"),
+        move(redPlayer.pos.angle(bluePlayer.pos), 1200),
+        scale(0.18),
+        cleanup(),
+        "rock",
+      ]);
+    }
   });
 
-  // redPlayer.onCollide("rockThrowing", (rockThrowing) => {
-  //   destroy(rockThrowing);
-  //   //add little explosion
+  // redPlayer.onCollide("projectile", (projectile) => {
+  //   console.log("are you even here");
+  //   destroy(projectile);
   //   redScore.text = redPlayerData.removeLog();
   // });
-
-  // add([
-
-  //   sprite("rockThrowing"),
-  //   pos(redPlayer.pos),
-  //   scale(0.2),
-  //   area(),
-  //   //move(bluePlayer.pos.angle(redPlayer.pos), 1500),
-  //   cleanup(),
-  //   "rockThrowing",
-  // ]);
 
   redPlayer.onCollide("wall", (wall) => {
     if (redPlayerData.canEscape && redPlayerData.winner == "not yet") {
@@ -474,6 +484,7 @@ function climbToWin(
     "skyLine",
   ]);
   playerData.winner = true;
+  destroyAll("carriedLog");
   treePos.y = height() - 25;
   if (treePos.x < width() / 2) {
     side = "left";
@@ -662,7 +673,7 @@ scene("instructions", () => {
     origin("center"),
     pos(width() / 2, height() / 2),
     text(
-      "How To Play: \n \n - pick your player \n - collect the logs \n - escape the rocks \n - once you collect 20 logs, run to the cliff and climb up your tree to win! \n \n[A].red  [-].white  [LEFT].white  [-].white  [J].blue \n[D].red  [-].white  [RIGHT].white  [-].white  [L].blue \n[W].red  [-].white  [JUMP].white  [-].white  [I].blue",
+      "How To Play: \n \n - pick your player \n - collect the logs \n - catch the rocks, and throw them at your opponent \n - once you collect 20 logs, run to the cliff and climb up your tree to win! \n \n[A].red  [-].white  [LEFT].white  [-].white  [J].blue \n[D].red  [-].white  [RIGHT].white  [-].white  [L].blue \n[W].red  [-].white  [JUMP].white  [-].white  [I].blue",
       {
         size: 36,
         width: 600,
