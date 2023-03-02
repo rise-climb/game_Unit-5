@@ -87,15 +87,10 @@ class Player {
 let redPlayerData = new Player("red");
 let bluePlayerData = new Player("blue");
 
-//loading the background image
 let bgLoad = await loadSprite("background", "images/SUPERFINALBACKGROUND.png");
 
-//for escaping
 let redEscape = null;
 let blueEscape = null;
-///////////
-/// loadings assets
-//////////
 
 loadSprite("log", "./images/log.png");
 loadSprite("redGuy", "./images/FINALredguy.ong.png");
@@ -105,25 +100,23 @@ loadSprite("blueClimbing", "./images/round-climbing-BlueGuy.png");
 loadSprite("redClimbing", "./images/round-climbing-RedGuy.png");
 loadSprite("rock", "./images/rock.png");
 
-//////// gamePlay scene
+
 scene("gamePlay", () => {
   redPlayerData = new Player("red");
   bluePlayerData = new Player("blue");
-  ///// make background
+
   let background = add([
     sprite("background"),
     pos(width() / 2, height() / 2),
     origin("center"),
-    scale(), // PUTTING A PIN
-    // Allow the background to be scaled
-    // Keep the background position fixed even when the camera moves
+    scale(),
     fixed(),
   ]);
   background.scaleTo(
     Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
     //Math.max(width() / browserWidth, height() / browserHeight)
   );
-  ////make platforms
+ 
   const platform = add([
     rect(width(), 50),
     pos(0, height()),
@@ -131,6 +124,7 @@ scene("gamePlay", () => {
     area(),
     solid(),
   ]);
+
   const leftPlatform = add([
     rect(1, height()),
     pos(width() / 6, 0),
@@ -139,6 +133,7 @@ scene("gamePlay", () => {
     opacity(0),
     "wall",
   ]);
+
   const rightPlatform = add([
     rect(1, height()),
     pos(5 * (width() / 6), 0),
@@ -148,10 +143,6 @@ scene("gamePlay", () => {
     "wall",
   ]);
 
-  /////////////////////////
-  //// loading and spawning in players and logs
-
-  //loadSprite("redGuy", "./images/FINALredguy.ong.png");
   const redPlayer = add([
     sprite("redGuy"),
     scale(0.15),
@@ -161,6 +152,7 @@ scene("gamePlay", () => {
     body(),
     { speed: 1200 },
   ]);
+
   const bluePlayer = add([
     sprite("blueGuy"),
     scale(0.15),
@@ -171,8 +163,6 @@ scene("gamePlay", () => {
     { speed: 1200 },
   ]);
 
-  /////////////////////////////// SCORES
-  /// creating the score numbers visually
   const redScore = add([
     text(redPlayerData.logCount, {
       size: 175,
@@ -196,14 +186,14 @@ scene("gamePlay", () => {
         pos(rand(width() / 4, 3 * (width() / 4)), 0),
         scale(0.3),
         area(),
-        move(DOWN, 200),
+        move(DOWN, 170),
         cleanup(),
         "log",
       ]);
     });
 
     wait(5, () => {
-      loop(5, () => {
+      loop(4, () => {
         add([
           sprite("rock"),
           pos(rand(width() / 4, 3 * (width() / 4)), 0),
@@ -228,18 +218,19 @@ scene("gamePlay", () => {
       bluePlayerData.winner == "not yet" &&
       redPlayerData.winner == "not yet"
     ) {
-      //if they collide with less than 19 logs
+  
       if (bluePlayerData.logCount < 19) {
         console.log(
           "blue collision with <19, log count at: ",
           bluePlayerData.logCount
         );
-        //add the log and update the counter
+
         blueScore.text = bluePlayerData.addLog();
-        //stacking the log on red
+
         let mainX = bluePlayer.pos.x;
         let mainY = bluePlayer.pos.y - 30;
         destroy(log);
+
         newP = add([
           sprite("log"),
           pos(mainX, mainY - 30),
@@ -249,14 +240,14 @@ scene("gamePlay", () => {
           scale(0.3),
           "carriedLog",
         ]);
-        //if they collide and they have 19 logs
+
       } else if (bluePlayerData.logCount == 19) {
         console.log("collision with 19");
-        //add the 20th log to their data
+
         bluePlayerData.addLog();
-        //hide their score
+
         blueScore.hidden = true;
-        //and run the "escape" function
+
         escape("blue");
       } else {
         console.log("else statement??");
@@ -384,10 +375,7 @@ scene("gamePlay", () => {
       );
     }
   });
-  //////////////////////////
 
-  //////////////////////////
-  //// player movement
   const blueJump = onKeyPress("i", () => {
     if (bluePlayer.isGrounded()) {
       bluePlayer.jump(bluePlayerData.jumpSpeed);
@@ -397,6 +385,7 @@ scene("gamePlay", () => {
   onKeyDown("j", () => {
     bluePlayer.move(-bluePlayer.speed, 0);
   });
+
   onKeyDown("l", () => {
     bluePlayer.move(bluePlayer.speed, 0);
   });
@@ -412,13 +401,8 @@ scene("gamePlay", () => {
   onKeyDown("d", () => {
     redPlayer.move(redPlayer.speed, 0);
   });
-  // redPlayer.onCollide("log", () => {
-  //   redPlayerData.logCount++;
-  //   console.log("red player log count: ", redPlayerData.logCount);
-  // });
 });
 
-/////////////////////////////////////////////////ESCAPING
 ///conditions met for starting escape, makes the text appear
 //on the screen and stops adding logs to the players log count
 function escape(player) {
@@ -464,7 +448,6 @@ function escape(player) {
   }
 }
 
-//when the player is at the cliff (already collided)
 function climbToWin(
   player,
   playerData,
@@ -483,6 +466,7 @@ function climbToWin(
     opacity(0),
     "skyLine",
   ]);
+
   playerData.winner = true;
   destroyAll("carriedLog");
   treePos.y = height() - 25;
@@ -549,23 +533,22 @@ function celebrate(playerData, side, treePosX, loser, redScore, blueScore) {
     pos(layingPosition.x, layingPosition.y),
   ]);
 }
-///////////////////////////////// TITLE SCREEN
+
+
 scene("titleScreen", () => {
-  ///// make background
+
   let background = add([
     sprite("background"),
     pos(width() / 2, height() / 2),
     origin("center"),
-    scale(), // PUTTING A PIN
-    // Allow the background to be scaled
-    // Keep the background position fixed even when the camera moves
+    scale(),
     fixed(),
   ]);
   background.scaleTo(
     Math.max(width() / bgLoad.tex.width, height() / bgLoad.tex.height)
   );
 
-  //// add buttons to go to the other scenes
+
   const instructButton = add([
     rect(500, 100),
     color(0, 0, 0),
@@ -638,15 +621,13 @@ scene("titleScreen", () => {
   });
 });
 
-///////////////////////////////// INSTRUCTIONS SCREEN
+
 scene("instructions", () => {
   let background = add([
     sprite("background"),
     pos(width() / 2, height() / 2),
     origin("center"),
-    scale(), // PUTTING A PIN
-    // Allow the background to be scaled
-    // Keep the background position fixed even when the camera moves
+    scale(),
     fixed(),
   ]);
   background.scaleTo(
@@ -693,7 +674,7 @@ scene("instructions", () => {
   ]);
 });
 
-///////////////////////////////// WIN GAME SCREEN/FUNCTIONl
+
 function winScreen(playerColor) {
   const restartButton = add([
     rect(400, 100),
@@ -747,33 +728,8 @@ function winScreen(playerColor) {
   });
 }
 
-/////////////////////////////////// STARTING THE GAME
+
 function startGame() {
   go("titleScreen");
 }
 startGame();
-
-////// climbing up tree
-
-// const tree = add([
-//   sprite("tree"),
-//   pos(200, 0),
-// ]);
-
-// // Define the movement function for the character sprite
-// function climb() {
-//   bluePlayer.move(0, -100);
-// }
-
-// // Set up collision detection between the character sprite and the tree object
-// bluePlayer.collides("tree", () => {
-//   // Stop the character's movement and remove the collision detection
-//   bluePlayer.pause();
-//   bluePlayer.collides("tree", null);
-
-//   // Climb the tree
-//   climb();
-// });
-
-// Start the game loop
-// start();
