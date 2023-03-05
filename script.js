@@ -424,6 +424,21 @@ function escape(player) {
       }
     });
   }
+  const leftBarrier = add([
+    rect(1, height()),
+    pos(1.5 * (width() / 6), 0),
+    area(),
+    solid(),
+    opacity(0),
+  ]);
+
+  const rightBarrier = add([
+    rect(1, height()),
+    pos(5.5 * (width() / 6), 0),
+    area(),
+    solid(),
+    opacity(0),
+  ]);
 }
 
 /// climb to win - player has already won, sets the stage to make them climb up the log and disables more game play
