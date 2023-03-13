@@ -109,7 +109,7 @@ scene("gamePlay", () => {
   let background = add([
     sprite("background"),
     pos(width() / 2, height() / 2),
-    origin("center"),
+    anchor("center"),
     scale(),
     fixed(),
   ]);
@@ -146,7 +146,7 @@ scene("gamePlay", () => {
   const redPlayer = add([
     sprite("redGuy"),
     scale(0.15),
-    origin("center"),
+    anchor("center"),
     area({ scale: 0.8 }),
     pos(width() / 3, 0),
     body(),
@@ -156,7 +156,7 @@ scene("gamePlay", () => {
   const bluePlayer = add([
     sprite("blueGuy"),
     scale(0.15),
-    origin("center"),
+    anchor("center"),
     area({ scale: 0.8 }),
     pos(2 * (width() / 3), 0),
     body(),
@@ -229,7 +229,7 @@ scene("gamePlay", () => {
           sprite("log"),
           pos(mainX, mainY - 30),
           area(),
-          origin("center"),
+          anchor("center"),
           follow(bluePlayer, -10), // * i),
           scale(0.3),
           "carriedLog",
@@ -261,7 +261,7 @@ scene("gamePlay", () => {
           sprite("log"),
           pos(mainX, mainY - 30),
           area(),
-          origin("center"),
+          anchor("center"),
           follow(redPlayer, -10), // * i),
           scale(0.3),
           "carriedLog",
@@ -285,7 +285,7 @@ scene("gamePlay", () => {
         sprite("rock"),
         pos(mainX, mainY - 30),
         area(),
-        origin("center"),
+        anchor("center"),
         move(bluePlayer.pos.angle(redPlayer.pos), 1200),
         scale(0.18),
         cleanup(),
@@ -308,7 +308,7 @@ scene("gamePlay", () => {
         sprite("rock"),
         pos(mainX, mainY - 30),
         area(),
-        origin("center"),
+        anchor("center"),
         move(redPlayer.pos.angle(bluePlayer.pos), 1200),
         scale(0.18),
         cleanup(),
@@ -476,7 +476,7 @@ function climbToWin(
     add([
       sprite(playerClimbing),
       scale(0.3),
-      origin("center"),
+      anchor("center"),
       pos(treePos.x, treePos.y - 35),
       area(),
       move(UP, 200),
@@ -515,7 +515,7 @@ function celebrate(playerData, side, treePosX, loser, redScore, blueScore) {
   add([
     sprite(winnerColor),
     scale(0.15),
-    origin("center"),
+    anchor("center"),
     pos(celebratingPos.x, celebratingPos.y),
   ]);
   let layingPosition = loser.pos;
@@ -523,7 +523,7 @@ function celebrate(playerData, side, treePosX, loser, redScore, blueScore) {
   add([
     sprite(loserColor),
     scale(0.15),
-    origin("center"),
+    anchor("center"),
     rotate(90),
     pos(layingPosition.x, layingPosition.y),
   ]);
@@ -535,7 +535,7 @@ scene("titleScreen", () => {
   let background = add([
     sprite("background"),
     pos(width() / 2, height() / 2),
-    origin("center"),
+    anchor("center"),
     scale(),
     fixed(),
   ]);
@@ -547,7 +547,7 @@ scene("titleScreen", () => {
     rect(500, 100),
     color(0, 0, 0),
     area(),
-    origin("center"),
+    anchor("center"),
     pos(width() / 2, 6 * (height() / 7)),
     "howTo",
   ]);
@@ -562,7 +562,7 @@ scene("titleScreen", () => {
       },
     }),
     area(),
-    origin("center"),
+    anchor("center"),
     pos(instructButton.pos),
     "howTo",
   ]);
@@ -582,14 +582,14 @@ scene("titleScreen", () => {
     }),
     area(),
     pos(center()),
-    origin("center"),
+    anchor("center"),
   ]);
 
   let startButton = add([
     rect(400, 100),
     color(0, 0, 0),
     area(),
-    origin("center"),
+    anchor("center"),
     pos(width() / 2, height() / 7),
     "startButton",
   ]);
@@ -604,7 +604,7 @@ scene("titleScreen", () => {
       },
     }),
     area(),
-    origin("center"),
+    anchor("center"),
     pos(startButton.pos),
     color(255, 255, 255),
     "startButton",
@@ -619,7 +619,7 @@ scene("instructions", () => {
   let background = add([
     sprite("background"),
     pos(width() / 2, height() / 2),
-    origin("center"),
+    anchor("center"),
     scale(),
     fixed(),
   ]);
@@ -635,7 +635,7 @@ scene("instructions", () => {
         }),
       },
     }),
-    origin("center"),
+    anchor("center"),
     pos(width() / 2, height() / 7),
     color(255, 255, 255),
   ]);
@@ -644,7 +644,7 @@ scene("instructions", () => {
   });
 
   add([
-    origin("center"),
+    anchor("center"),
     pos(width() / 2, height() / 2),
     text(
       "How To Play: \n \n - pick your player \n - collect the logs \n - catch the rocks, and throw them at your opponent \n - once you collect 20 logs, run to the cliff and climb up your tree to win! \n \n[A].red  [-].white  [LEFT].white  [-].white  [J].blue \n[D].red  [-].white  [RIGHT].white  [-].white  [L].blue \n[W].red  [-].white  [JUMP].white  [-].white  [I].blue",
@@ -672,7 +672,7 @@ function winScreen(playerColor) {
     rect(400, 100),
     color(0, 0, 0),
     area(),
-    origin("center"),
+    anchor("center"),
     pos(width() / 2, 5 * (height() / 7)),
     "restart",
   ]);
@@ -686,7 +686,7 @@ function winScreen(playerColor) {
         }),
       },
     }),
-    origin("center"),
+    anchor("center"),
     pos(width() / 2, height() / 7),
     color(255, 255, 255),
   ]);
@@ -704,7 +704,7 @@ function winScreen(playerColor) {
       },
     }),
     area(),
-    origin("center"),
+    anchor("center"),
     pos(restartButton.pos),
     "Restart",
   ]);
